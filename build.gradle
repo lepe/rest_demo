@@ -1,0 +1,86 @@
+import java.text.SimpleDateFormat
+
+buildscript {
+    repositories {
+        mavenLocal()
+    }
+    dependencies {
+        classpath 'org.jfrog.buildinfo:build-info-extractor-gradle:4.+'
+        classpath 'com.github.jengelman.gradle.plugins:shadow:2.0.4'
+    }
+}
+
+plugins {
+    id 'java'
+    id 'groovy'
+    id 'idea'
+    id 'maven'
+    id 'maven-publish'
+    id "com.jfrog.artifactory" version "4.9.6"
+    id 'com.github.johnrengelman.shadow' version '2.0.4'
+}
+
+group groupName
+version currentVersion
+
+repositories {
+    mavenLocal()
+    maven {
+        url "${repositoryURL}/${repositoryResolve}"
+        credentials {
+            username = "${artifactoryUser}"
+            password = "${artifactoryPassword}"
+        }
+    }
+    mavenCentral()
+    maven {
+        url "http://nexus.ailis.de/content/groups/public/"
+    }
+}
+
+dependencies {
+    def commonVer = "2.7.7"
+    compile "com.intellisrc:core:${commonVer}"
+    compile "com.intellisrc:db:${commonVer}"
+    compile "com.intellisrc:web:${commonVer}"
+    testCompile 'org.spockframework:spock-unitils:1.2-groovy-2.5'
+}
+
+task copyRuntimeLibs(type: Copy) {
+    into "lib"
+    from configurations.compileOnly
+}
+
+shadowJar {
+    baseName = project.name
+    version = project.version
+    classifier = "linux-x86_64"
+    zip64 = true
+    shadowJar.finalizedBy copyRuntimeLibs
+}
+
+//create a single Jar with all dependencies
+jar {
+    from configurations.compile.collect { zipTree it }
+    manifest {
+        attributes(
+            'Implementation-Title': "${jarTitle}",
+            'Implementation-Version': version,
+            'Buildtime' : new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()),
+            'Main-Class': "${jarClass}",
+            "Class-Path": configurations.compileOnly.collect { 'lib/' + it.getName() }.join(' ')
+        )
+    }
+    exclude 'META-INF/*.RSA', 'META-INF/*.DSA', 'META-INF/*.SF'
+}
+
+artifactory {
+    contextUrl = "${repositoryURL}"
+    resolve {
+        repository {
+            repoKey =  "${repositoryResolve}" // The Artifactory repository key to publish to
+            username = "${artifactoryUser}" // The publisher user name
+            password = "${artifactoryPassword}" // The publisher password
+        }
+    }
+}
