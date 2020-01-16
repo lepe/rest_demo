@@ -18,19 +18,18 @@ public class PersonDestroyService extends Service {
         setPath(path);
         setAction((ActionRequestResponse) (Request request, Response response) -> {
             boolean ok = false;
+            String err = "";
             int id;
             try {
                 id = Integer.parseInt(request.queryParams("id"));
-                if(id > 0) {
-                    Person person = new Person(id);
-                    person.delete();
-                } else {
-                    Log.w("ID was zero.");
-                }
+                Person person = new Person(id);
+                ok = person.delete();
             } catch(NumberFormatException | Person.IllegalPersonException exception) {
-                Log.w("Person was not found.");
+                response.status(400);
+                err = "Person was not found";
+                Log.w(err);
             }
-            return (Map<String, Boolean>) Map.of("ok", ok);
+            return (Map<String, ?>) Map.of("ok", ok, "err", err);
         });
     }
 }

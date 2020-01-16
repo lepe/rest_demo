@@ -42,7 +42,7 @@ public class Person {
      * @param hobby     : String array with a list of hobbies
      * @throws IllegalPersonException : Unable to create Person in database
      */
-    public Person(String firstName, String lastName, short age, Color favouriteColor, String[] hobby) throws IllegalPersonException {
+    public Person(String firstName, String lastName, int age, Color favouriteColor, String[] hobby) throws IllegalPersonException {
         this.firstName = firstName;
         this.lastName = lastName;
         this.age = age;
@@ -75,6 +75,10 @@ public class Person {
      */
     public Person(int id) throws IllegalPersonException {
         this.id = id;
+        if(id <= 0) {
+            Log.e("Trying to get a Person with invalid ID: %d", id);
+            throw new IllegalPersonException();
+        }
 
         DB db = Database.connect();
         Data row = db.table(table).get(id);
@@ -117,10 +121,10 @@ public class Person {
 
     /**
      * Update a Person's age
-     * @param newAge : age (as short)
+     * @param newAge : age
      * @return true if succeeds
      */
-    public boolean updateAge(short newAge) {
+    public boolean updateAge(int newAge) {
         if(isValid()) {
 
             Log.i("Person with id: %d updated his/her age to: %d", id, newAge);
@@ -211,21 +215,41 @@ public class Person {
     ////////////////////////// STATIC METHODS ////////////////////////////////
 
     /**
+     * Clone a Person : I hope this is not illegal :)
+     * This method will copy all fields from an existing Person and
+     * create a new one based on it.
+     *
+     * @param person : Person object to copy from
+     * @return Person (with new ID)
+     * @throws IllegalPersonException : Unable to clone Person : if it was illegal after all.
+     */
+    static public Person clone(Person person) throws IllegalPersonException {
+        Person clone = new Person(person.firstName, person.lastName, person.age, person.favouriteColor, person.hobby);
+        Log.i("Clone process succeed. New id is: %d", clone.id);
+        return clone;
+    }
+    /**
      * Creates a Person from a Map Object
      * @param map : Data to import
      * @return a Person object
+     * @throws IllegalPersonException : Unable to import person from Map
      */
-    static private Person fromMap(Map<?,?> map) {
+    static public Person fromMap(Map<?,?> map) throws IllegalPersonException {
         Person person = new Person();
-        HashMap<Object, Object> personMap = new HashMap<>(map);
-        person.id = Integer.parseInt(personMap.get("id").toString());
-        person.firstName = personMap.get("first").toString();
-        person.lastName = personMap.get("last").toString();
-        person.age = (Integer) personMap.get("age");
-        person.favouriteColor = Color.fromString(personMap.get("color").toString());
-        String hobbies = personMap.get("hobby").toString();
-        if (!hobbies.isEmpty()) {
-            person.hobby = hobbies.split(",");
+        HashMap<?, ?> personMap = new HashMap<>(map);
+        try {
+            person.id = Integer.parseInt(personMap.get("id").toString());
+            person.firstName = personMap.get("first").toString();
+            person.lastName = personMap.get("last").toString();
+            person.age = (Integer) personMap.get("age");
+            person.favouriteColor = Color.fromString(personMap.get("color").toString());
+            String hobbies = personMap.get("hobby").toString();
+            if (!hobbies.isEmpty()) {
+                person.hobby = hobbies.split(",");
+            }
+        } catch (Exception e) {
+            Log.e("Unable to import Person from Map", e);
+            throw new IllegalPersonException();
         }
         return person;
     }
@@ -240,7 +264,9 @@ public class Person {
         if(rows != null) {
             var data = rows.toListMap();
             for (var datum : data) {
-                list.add(Person.fromMap(datum));
+                try {
+                    list.add(Person.fromMap(datum));
+                } catch (IllegalPersonException ignored) {}
             }
         }
         return Collections.unmodifiableList(list);

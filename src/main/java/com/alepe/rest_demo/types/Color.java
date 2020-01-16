@@ -4,6 +4,7 @@ package com.alepe.rest_demo.types;
  * List of available colors
  * @since 2020/01/15.
  */
+@SuppressWarnings("unused")
 public enum Color {
     NONE, RED, BLUE, GREEN, YELLOW, ORANGE, PINK, BROWN, WHITE, BLACK;
 

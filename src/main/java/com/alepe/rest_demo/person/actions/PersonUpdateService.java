@@ -1,9 +1,14 @@
 package com.alepe.rest_demo.person.actions;
 
+import com.alepe.rest_demo.person.Person;
+import com.alepe.rest_demo.types.Color;
+import com.intellisrc.core.Log;
+import com.intellisrc.web.JSON;
 import com.intellisrc.web.Service;
 import spark.Request;
 import spark.Response;
 
+import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -15,8 +20,52 @@ public class PersonUpdateService extends Service {
         setMethod(Service.Method.PUT);
         setPath(path);
         setAction((ActionRequestResponse) (Request request, Response response) -> {
+            boolean ok = false;
+            String err = "";
+            int id;
+            try {
+                id = Integer.parseInt(request.params("id"));
+                String body = request.body().trim();
+                if(! body.isEmpty()) {
+                    Person person = new Person(id);
+                    // Import json and convert it into HashMap with string keys:
+                    var json = JSON.decode(body).toMap();
+                    if(!json.isEmpty()) {
+                        Log.i("Update Person requested by: %s", request.ip());
+                        for (var key : json.keySet()) {
+                            switch (key.toString()) {
+                                case "last": break; //Do nothing. It will be covered by "first".
+                                case "first" :
+                                    person.updateName(json.get("first").toString(), json.get("last").toString());
+                                    break;
+                                case "age" :
+                                    person.updateAge((Integer) json.get("age"));
+                                    break;
+                                case "color":
+                                    person.updateColor(Color.fromString(json.get("color").toString()));
+                                    break;
+                                default:
+                                    Log.w("Unidentified key: %s", key.toString());
+                            }
+                        }
 
-            return (Map<String, Boolean>) Map.of("ok", true);
+                    } else {
+                        response.status(400);
+                        err = "data was empty or invalid. Please check the request.";
+                    }
+                } else {
+                    response.status(400);
+                    err = "Body was empty";
+                }
+            } catch (NumberFormatException | Person.IllegalPersonException ignored) {
+                response.status(400);
+                err = "Invalid ID passed to update";
+            }
+            // Log in case of error
+            if(! err.isEmpty()) {
+                Log.w("err");
+            }
+            return (Map<String, ?>) Map.of("ok", ok, "err", err);
         });
     }
 }
