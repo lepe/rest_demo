@@ -2,6 +2,7 @@ package com.alepe.rest_demo.services;
 
 import com.intellisrc.web.Service;
 import spark.Request;
+import spark.Response;
 
 import java.util.Map;
 
@@ -13,7 +14,7 @@ public class PersonUpdateService extends Service {
     public PersonUpdateService(String path) {
         setMethod(Service.Method.PUT);
         setPath(path);
-        setAction((Service.ActionRequest) (Request request) -> {
+        setAction((ActionRequestResponse) (Request request, Response response) -> {
 
             return (Map<String, Boolean>) Map.of("ok", true);
         });

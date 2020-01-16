@@ -4,6 +4,7 @@ import com.alepe.rest_demo.Person;
 import com.intellisrc.core.Log;
 import com.intellisrc.web.Service;
 import spark.Request;
+import spark.Response;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -15,16 +16,22 @@ import java.util.Map;
 public class PersonGetService extends Service {
     public PersonGetService(String path) {
         setPath(path);
-        setAction((ActionRequest) (Request request) -> {
-            int id = Integer.parseInt(request.params("id"));
-            Map<String, Object> response = new HashMap<>();
+         setAction((ActionRequestResponse) (Request request, Response response) -> {
+            Map<String, Object> result = new HashMap<>();
+            int id = 0;
             try {
+                id = Integer.parseInt(request.params("id"));
+                Log.i("Person %d requested by %s", id, request.ip());
                 Person person = new Person(id);
-                response = person.toMap();
+                result = person.toMap();
             } catch (Person.IllegalPersonException e) {
+                response.status(204);
                 Log.w("Person with id: %d not found", id);
+            } catch (NumberFormatException e) {
+                response.status(400);
+                Log.w("Person id was mistaken.");
             }
-            return response;
+            return result;
         });
     }
 }

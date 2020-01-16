@@ -5,6 +5,7 @@ import com.alepe.rest_demo.Person;
 import com.intellisrc.core.Log;
 import com.intellisrc.web.Service;
 import spark.Request;
+import spark.Response;
 
 import java.util.Map;
 
@@ -17,7 +18,7 @@ public class PersonCreateService extends Service {
         // Create Person service:
         setMethod(Service.Method.POST);
         setPath(path);
-        setAction((ActionRequest) (Request request) -> {
+        setAction((ActionRequestResponse) (Request request, Response response) -> {
             boolean ok = false;
             String name = request.queryParams("name");
             String last = request.queryParams("last");

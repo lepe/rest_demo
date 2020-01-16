@@ -8,7 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Sets the API Controller for CRUD operations related to Person
+ * Sets the API Route Controller for CRUD operations related to Person
  *
  * URI examples:
  *
@@ -44,17 +44,17 @@ public class PersonService implements ServiciableMultiple {
     public List<Service> getServices() {
         List<Service> services = new ArrayList<>();
         // List Person service:
-        services.add(new PersonListService(".lst/:offset/:qty/"));
+        services.add(new PersonListService(".lst/:offset/:qty"));
         // Get Person service:
-        services.add(new PersonGetService(".get/:id/"));
+        services.add(new PersonGetService(".get/:id"));
         // Search Person service:
-        services.add(new PersonSearchService(".fnd/:keyword/"));
+        services.add(new PersonSearchService(".fnd/:keyword"));
         // Create Person service:
         services.add(new PersonCreateService(".add"));
         // Update or Replace Person service:
-        services.add(new PersonUpdateService(".upd/:id/"));
+        services.add(new PersonUpdateService(".upd/:id"));
         // Delete Person service:
-        services.add(new PersonDestroyService(".del/:id/"));
+        services.add(new PersonDestroyService(".del/:id"));
         return services;
     }
 }

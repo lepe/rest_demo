@@ -1,8 +1,10 @@
 package com.alepe.rest_demo.services;
 
 import com.alepe.rest_demo.Person;
+import com.intellisrc.core.Log;
 import com.intellisrc.web.Service;
 import spark.Request;
+import spark.Response;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -15,12 +17,18 @@ import java.util.Map;
 public class PersonSearchService extends Service {
     public PersonSearchService(String path) {
         setPath(path);
-        setAction((ActionRequest) (Request request) -> {
+        setAction((ActionRequestResponse) (Request request, Response response) -> {
             String name = request.params("keyword");
             List<Map<String, Object>> list = new ArrayList<>();
             if(! name.isEmpty()) {
-                for(Person person : Person.searchByName(name)) {
-                    list.add(person.toMap());
+                List<Person> found = Person.searchByName(name);
+                if(found.isEmpty()) {
+                    response.status(204);
+                    Log.w("Search [%s] didn't match any record", name);
+                } else {
+                    for (Person person : found) {
+                        list.add(person.toMap());
+                    }
                 }
             }
             return list;

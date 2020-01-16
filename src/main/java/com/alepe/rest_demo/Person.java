@@ -23,7 +23,7 @@ public class Person {
     protected int id;
     protected String firstName;
     protected String lastName;
-    protected short age;
+    protected int age;
     protected Color favouriteColor;
     protected String[] hobby;
 
@@ -79,7 +79,7 @@ public class Person {
         Data row = db.table(table).get(id);
         db.close();
 
-        if(row == null) {
+        if(row == null || row.isEmpty()) {
             Log.w("Person with id: %d doesn't exists", id);
             throw new IllegalPersonException();
         }
@@ -87,7 +87,7 @@ public class Person {
         HashMap<Object, Object> personMap = new HashMap<Object, Object>(row.toMap());
         this.firstName      = personMap.get("first").toString();
         this.lastName       = personMap.get("last").toString();
-        this.age            = (Short) personMap.get("age");
+        this.age            = (Integer) personMap.get("age");
         this.favouriteColor = Color.fromString(personMap.get("color").toString());
         String hobbies      = personMap.get("hobby").toString();
         if(!hobbies.isEmpty()) {
@@ -220,7 +220,7 @@ public class Person {
         person.id = Integer.parseInt(personMap.get("id").toString());
         person.firstName = personMap.get("first").toString();
         person.lastName = personMap.get("last").toString();
-        person.age = (Short) personMap.get("age");
+        person.age = (Integer) personMap.get("age");
         person.favouriteColor = Color.fromString(personMap.get("color").toString());
         String hobbies = personMap.get("hobby").toString();
         if (!hobbies.isEmpty()) {
@@ -252,10 +252,16 @@ public class Person {
      */
     static public List<Person> searchByName(String name) {
         DB db = Database.connect();
-        String search = "%" + name + "%";
-        Data rows = db.table(table).where("first LIKE ? or last LIKE ?", search).get();
-        db.close();
-        return fromData(rows);
+        List<Person> result = new ArrayList<>();
+        String search = String.join("", name.toLowerCase().replaceAll("[^a-z]", ""));
+        if(!search.isEmpty()) {
+            Log.i("Searching for: %s", search);
+            search = "%" + search + "%";
+            Data rows = db.table(table).where("lower(`first`) LIKE ? or lower(`last`) LIKE ?", search, search).get();
+            result = fromData(rows);
+            db.close();
+        }
+        return result;
     }
 
     /**
@@ -282,7 +288,14 @@ public class Person {
             File createSQL = SysInfo.getFile("create.sql");
             if (createSQL.exists()) {
                 try {
-                    db.set(Files.readString(createSQL.toPath()));
+                    String query = Files.readString(createSQL.toPath());
+                    if(!query.isEmpty()) {
+                        for(String command : query.replaceAll("\n","").split(";")) {
+                            if(!command.trim().isEmpty()) {
+                                db.set(command);
+                            }
+                        }
+                    }
                 } catch (IOException e) {
                     Log.w("Unable to open file: %s", createSQL.getAbsoluteFile());
                 }

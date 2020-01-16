@@ -5,6 +5,7 @@ import com.intellisrc.core.Log;
 import com.intellisrc.web.Service;
 import com.intellisrc.web.Service.ActionRequest;
 import spark.Request;
+import spark.Response;
 
 import java.util.Map;
 
@@ -16,7 +17,7 @@ public class PersonDestroyService extends Service {
     public PersonDestroyService(String path) {
         setMethod(Service.Method.DELETE);
         setPath(path);
-        setAction((ActionRequest) (Request request) -> {
+        setAction((ActionRequestResponse) (Request request, Response response) -> {
             boolean ok = false;
             int id;
             try {
