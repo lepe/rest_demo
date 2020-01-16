@@ -8,7 +8,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * This class perform CRUD operations about Person
+ * Sets the API Controller for CRUD operations related to Person
+ *
  * URI examples:
  *
  * Get Person List (offset: 1, 20 records):

@@ -21,6 +21,8 @@ class Main extends SysService {
     public void onStart() {
         // Initialize Database:
         Database.init();
+        // Create table if required:
+        Person.initDB();
 
         // Initialize Web service:
         ws.port = 7777;

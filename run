@@ -6,7 +6,6 @@ if [[ -d build/ ]]; then
 fi
 
 msgJAVABIN="/usr/bin/java"
-#classpath is not required but it doesn't hurt
 JAR=$(ls -v -w 1 *.jar | tail -n1)
-$msgJAVABIN -Xmx6G -Xms1G -jar $JAR ${@:1}
+$msgJAVABIN -Xmx6G -Xms1G -jar $JAR "${@:1}"
 exit 0;

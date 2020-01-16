@@ -1,10 +1,15 @@
 package com.alepe.rest_demo;
 
+import com.intellisrc.core.Config;
 import com.intellisrc.core.Log;
+import com.intellisrc.core.SysInfo;
 import com.intellisrc.db.DB;
 import com.intellisrc.db.Data;
 import com.intellisrc.db.Database;
 
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
 import java.util.*;
 
 /**
@@ -264,5 +269,25 @@ public class Person {
         Data rows = db.table(table).limit(qty, offset).get();
         db.close();
         return fromData(rows);
+    }
+
+    /**
+     * It will create the database if the database doesn't exists.
+     * NOTE: You may remove the database file to create it again.
+     */
+    static public void initDB() {
+        File dbFile = SysInfo.getFile(Config.get("db.name", "rest") + ".db");
+        if(!dbFile.exists()) {
+            DB db = Database.connect();
+            File createSQL = SysInfo.getFile("create.sql");
+            if (createSQL.exists()) {
+                try {
+                    db.set(Files.readString(createSQL.toPath()));
+                } catch (IOException e) {
+                    Log.w("Unable to open file: %s", createSQL.getAbsoluteFile());
+                }
+            }
+            db.close();
+        }
     }
 }
