@@ -112,10 +112,18 @@ public class Person {
      * @return true if succeeds
      */
     public boolean updateName(String newFirstName, String newLastName) {
-        if(isValid()) {
+        boolean ok = false;
+        if(isValid() &&! newFirstName.isEmpty() &&! newLastName.isEmpty()) {
+            DB db = Database.connect();
+            ok = db.table(table).key("id").update(Map.of("first", newFirstName, "last", newLastName), id);
+            if(ok) {
+                firstName = newFirstName;
+                lastName = newLastName;
+            }
+            db.close();
             Log.i("Person with id: %d updated name to: %s %s", id, newFirstName, newLastName);
         }
-        return false;
+        return ok;
     }
 
     /**
@@ -125,7 +133,7 @@ public class Person {
      */
     public boolean updateAge(int newAge) {
         boolean ok = false;
-        if(isValid()) {
+        if(isValid() && newAge > 0) {
             DB db = Database.connect();
             ok = db.table(table).key("id").update(Map.of("age", newAge), id);
             if(ok) {
@@ -143,11 +151,17 @@ public class Person {
      * @return true if succeeds
      */
     public boolean updateColor(Color color) {
+        boolean ok = false;
         if(isValid()) {
-
+            DB db = Database.connect();
+            ok = db.table(table).key("id").update(Map.of("color", color.toString()), id);
+            db.close();
+            if(ok) {
+                favouriteColor = color;
+            }
             Log.i("Person with id: %d changed favourite color to: %s", id, color.toString());
         }
-        return false;
+        return ok;
     }
 
     /**

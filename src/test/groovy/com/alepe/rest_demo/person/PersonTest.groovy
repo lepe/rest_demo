@@ -2,6 +2,7 @@ package com.alepe.rest_demo.person
 
 import com.alepe.rest_demo.types.Color
 import com.intellisrc.core.Config
+import com.intellisrc.core.Log
 import com.intellisrc.core.SysInfo
 import com.intellisrc.db.Database
 import spock.lang.Specification
@@ -85,29 +86,89 @@ class PersonTest extends Specification {
             "Jenny" | "Mandela" | 22  | "black" | "reading,movies"
             "Bob"   | "Sponge"  | 5   | "yellow"| "swimming"
     }
-
-    def "Update age should update Person's age"() {
+    /**
+     * This test will verify that Person can update age
+     * @return
+     */
+    def "should update Person's age or fail if incorrect"() {
         setup:
             Person.initDB()
-        when:
             // Create the Person object:
-            Color colorObj = Color.fromString(color)
-            String[] hobbyList = hobby.split(",")
-            Person person = new Person(first, last, age, colorObj, hobbyList)
-        then:
-            assert person.valid : "Person was not valid"
-            // It should not raise and Exception:
-            notThrown(Person.IllegalPersonException)
+            Color colorObj = Color.fromString("red")
+            String[] hobby = ["reading"]
+            Person person = new Person("Ben", "Walkman", 22, colorObj, hobby)
         when:
-            person.updateAge(change)
+            assert person.updateAge(change) == correct
         then:
-            assert person.age == change : "Age was not updated in object"
-            new Person(person.id).age == change
+            if(correct) {
+                assert person.age == change: "Age was not updated in object"
+                assert new Person(person.id).age == change : "Age was no updated in db"
+            }
         cleanup:
-            person.delete()
+            assert person.delete()
         where:
-            first   | last      | age | change | color   | hobby
-            "Jenny" | "Mandela" | 22  | 33     | "black" | "reading,movies"
+            change | correct
+            33     | true
+            0      | false
+            -100   | false
+    }
+    /**
+     * This test will test changing person name
+     * @return
+     */
+    def "should update Person's name or fail if incorrect"() {
+        setup:
+            Person.initDB()
+            // Create the Person object:
+            Color colorObj = Color.fromString("white")
+            String[] hobby = ["reading"]
+            Person person = new Person("Ben", "Walkman", 22, colorObj, hobby)
+        when:
+            assert person.updateName(first, last) == correct
+        then:
+            if(correct) {
+                assert person.firstName == first: "First name was not updated in object"
+                assert person.lastName == last : "Last name was not updated in object"
+                new Person(person.id).with {
+                    assert firstName == first : "First name was not updated in db"
+                    assert lastName == last : "Last name was not updated in db"
+                }
+            }
+        cleanup:
+            assert person.delete()
+        where:
+            first       | last      | correct
+            "Peter"     | "Watson"  | true
+            ""          | "Redson"  | false
+            "Brittany"  | ""        | false
+    }
 
+    /**
+     * Tests if favourite color is updated correctly
+     * @return
+     */
+    def "should update Person's favourite color"() {
+        setup:
+            Person.initDB()
+            // Create the Person object:
+            Color colorObj = Color.fromString("blue")
+            assert colorObj == Color.BLUE
+            String[] hobby = ["reading","writing"]
+            Person person = new Person("Sarah", "Johnson", 44, colorObj, hobby)
+        when:
+            Color newColor = Color.fromString(color)
+        then:
+            assert expected == newColor
+            assert person.updateColor(newColor)
+            assert person.favouriteColor == newColor : "Color was not updated in object"
+            assert new Person(person.id).favouriteColor == newColor : "Color was not updated in db"
+        cleanup:
+            assert person.delete()
+        where:
+            color     | expected
+            "green "  | Color.GREEN
+            "none"    | Color.NONE
+            ""        | Color.NONE  //must be "none"
+            "invalid" | Color.NONE
     }
 }
