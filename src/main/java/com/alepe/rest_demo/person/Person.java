@@ -51,7 +51,6 @@ public class Person {
 
         DB db = Database.connect();
         Map<String, Object> row = new HashMap<>();
-        row.put("id", 0);
         row.put("first", firstName);
         row.put("last", lastName);
         row.put("age", age);
@@ -81,7 +80,7 @@ public class Person {
         }
 
         DB db = Database.connect();
-        Data row = db.table(table).get(id);
+        Data row = db.table(table).key("id").get(id);
         db.close();
 
         if(row == null || row.isEmpty()) {
@@ -125,11 +124,17 @@ public class Person {
      * @return true if succeeds
      */
     public boolean updateAge(int newAge) {
+        boolean ok = false;
         if(isValid()) {
-
+            DB db = Database.connect();
+            ok = db.table(table).key("id").update(Map.of("age", newAge), id);
+            if(ok) {
+                age = newAge;
+            }
+            db.close();
             Log.i("Person with id: %d updated his/her age to: %d", id, newAge);
         }
-        return false;
+        return ok;
     }
 
     /**
@@ -177,19 +182,22 @@ public class Person {
      * @return true if succeeds
      */
     public boolean delete() {
+        boolean ok = false;
         if(isValid()) {
-
+            DB db = Database.connect();
+            ok = db.table(table).key("id").delete(id);
+            db.close();
             Log.i("Person with id: %d was deleted.", id);
             id = 0; //clear this Person
         }
-        return false;
+        return ok;
     }
 
     /**
      * Validate a Person
      * @return true if a Person is valid
      */
-    private boolean isValid() {
+    public boolean isValid() {
         boolean valid = id > 0 && !firstName.isEmpty();
         if(!valid) {
             Log.w("Person was not valid");
