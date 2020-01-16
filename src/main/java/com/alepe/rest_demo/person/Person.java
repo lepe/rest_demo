@@ -26,7 +26,7 @@ public class Person {
     protected String lastName;
     protected int age;
     protected Color favouriteColor;
-    protected String[] hobby;
+    protected String[] hobby = new String[0];
 
     /**
      * Exception thrown when we can not create a Person object
@@ -165,30 +165,23 @@ public class Person {
     }
 
     /**
-     * Add a hobby to a Person
-     * @param hobby : String representing the hobby
+     * Update hobby to a Person
+     * @param hobbies : String array of new hobbies
      * @return true if succeeds
      */
-    public boolean addHobby(String hobby) {
+    public boolean updHobbies(String[] hobbies) {
+        boolean ok = false;
         if(isValid()) {
-
+            DB db = Database.connect();
+            String newHobbiesStr = String.join(",", hobbies);
+            ok = db.table(table).key("id").update(Map.of("hobby", newHobbiesStr), id);
+            db.close();
+            if(ok) {
+                hobby = hobbies;
+            }
             Log.i("Person with id: %d added: %s as hobby", id, hobby);
         }
-
-        return false;
-    }
-
-    /**
-     * Delete a hobby from a Person
-     * @param hobby : String representing the hobby
-     * @return true if succeeds
-     */
-    public boolean delHobby(String hobby) {
-        if(isValid()) {
-
-            Log.i("Person with id: %d deleted: %s as hobby", id, hobby);
-        }
-        return false;
+        return ok;
     }
 
     /**

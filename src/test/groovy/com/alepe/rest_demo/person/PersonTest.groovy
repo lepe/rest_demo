@@ -2,7 +2,6 @@ package com.alepe.rest_demo.person
 
 import com.alepe.rest_demo.types.Color
 import com.intellisrc.core.Config
-import com.intellisrc.core.Log
 import com.intellisrc.core.SysInfo
 import com.intellisrc.db.Database
 import spock.lang.Specification
@@ -26,6 +25,7 @@ class PersonTest extends Specification {
     def cleanup() {
         Database.quit()
     }
+
     /**
      * This test will verify that the DB can be created correctly
      */
@@ -45,6 +45,7 @@ class PersonTest extends Specification {
                 dbFile.delete()
             }
     }
+
     /**
      * This test will verify that Person is being created in the database
      * Then it will delete it and verify that it was deleted correctly
@@ -86,6 +87,7 @@ class PersonTest extends Specification {
             "Jenny" | "Mandela" | 22  | "black" | "reading,movies"
             "Bob"   | "Sponge"  | 5   | "yellow"| "swimming"
     }
+
     /**
      * This test will verify that Person can update age
      * @return
@@ -112,6 +114,7 @@ class PersonTest extends Specification {
             0      | false
             -100   | false
     }
+
     /**
      * This test will test changing person name
      * @return
@@ -170,5 +173,156 @@ class PersonTest extends Specification {
             "none"    | Color.NONE
             ""        | Color.NONE  //must be "none"
             "invalid" | Color.NONE
+    }
+
+    /**
+     * This Test is to verify that search method is working as expected
+     * @return
+     */
+    def "Search must return correct Person objects"() {
+        setup:
+            Person.initDB()
+            List<Person> list = []
+            // Create the Person object:
+            def people = [
+                    [
+                            first: "Larry",
+                            last: "Bird",
+                            age: 50,
+                            color: Color.GREEN,
+                            hobby: ["basketball","sports","reading"]
+                    ],
+                    [
+                            first: "Michael",
+                            last: "Jordan",
+                            age: 40,
+                            color: Color.RED,
+                            hobby: ["basketball","sports","golf","baseball"]
+                    ],
+                    [
+                            first: "Magic",
+                            last: "Johnson",
+                            age: 45,
+                            color: Color.YELLOW,
+                            hobby: ["basketball","sports","talking"]
+                    ]
+            ]
+            people.each {
+                list << new Person(
+                        it.first.toString(),
+                        it.last.toString(),
+                        it.age as int,
+                        it.color as Color,
+                        it.hobby as String[]
+                )
+            }
+        expect:
+            assert Person.searchByName("michael").size() > 0
+            assert Person.searchByName("jordan").size() > 0
+            assert Person.searchByName("magic").size() > 0
+            assert Person.searchByName("bird").size() > 0
+            assert Person.searchByName("zzzz").empty
+        cleanup :
+            if(!list.empty) {
+                list.each { it.delete() }
+            }
+    }
+    /**
+     * This test will add and remove hobbies
+     */
+    def "Update Hobbies"() {
+        setup:
+            String[] hobbies = ["shopping","jogging","yoga","travelling"]
+            Person person = new Person("Elizabeth", "Hurley", 30, Color.RED, hobbies)
+            assert person.hobby.size() == hobbies.size()
+        when:
+            String[] newHobbies = ["games","swimming"]
+            assert person.updHobbies(newHobbies)
+        then:
+            assert person.hobby == newHobbies   : "Hobby was not updated in object"
+            assert new Person(person.id).hobby.toList().containsAll(newHobbies) : "Hobby was not updated in database"
+            assert person.hobby.size() == newHobbies.size()
+        when:
+            newHobbies = []
+            assert person.updHobbies(newHobbies)
+        then:
+            assert person.hobby.length == 0 : "[Empty] Hobby was not updated in object"
+            assert new Person(person.id).hobby.length == 0 : "[Empty] Hobby was not updated in database"
+        cleanup:
+            person.delete()
+    }
+
+    /**
+     * This test verify that exporting a Person object
+     * will return the expected Map
+     */
+    def "Person exported as Map"() {
+        setup:
+            String[] hobbies = ["dancing","singing"]
+            Person person = new Person("Katty", "Perry", 25, Color.PINK, hobbies)
+        when:
+            def map = person.toMap()
+        then:
+            map.with {
+                assert id       == person.id
+                assert first    == person.firstName
+                assert last     == person.lastName
+                assert age      == person.age
+                assert color    == person.favouriteColor.toString()
+                assert person.hobby.toList().containsAll(hobbies)
+            }
+        cleanup:
+            assert person.delete()
+    }
+
+    /**
+     * This test will prove that People cloning is possible
+     */
+    def "Clone Person"() {
+        setup:
+            String[] hobbies = ["boxing","singing"]
+            Person person = new Person("Ed", "Sheeran", 15, Color.ORANGE, hobbies)
+        when:
+            Person clone = Person.clone(person)
+        then:
+            notThrown(Person.IllegalPersonException)
+            assert clone.id
+            person.with {
+                assert id != clone.id
+                assert firstName == clone.firstName
+                assert lastName == clone.lastName
+                assert age == clone.age
+                assert favouriteColor == clone.favouriteColor
+                assert hobby == clone.hobby
+            }
+        cleanup:
+            assert person.delete()
+            assert clone.delete()
+    }
+
+    /**
+     * This test verify that a Person can be created from Map
+     * However this method won't create it on database.
+     */
+    def "Person from Map"() {
+        when:
+            Person person = Person.fromMap(
+                id      : 200,
+                first   : "Stephanie",
+                last    : "Lee",
+                age     : 50,
+                color   : Color.BLACK,
+                hobby   : ["martial arts","teaching"]
+            )
+        then:
+            notThrown(Person.IllegalPersonException)
+            person.with {
+                assert id
+                assert firstName
+                assert lastName
+                assert age
+                assert favouriteColor
+                assert hobby
+            }
     }
 }
