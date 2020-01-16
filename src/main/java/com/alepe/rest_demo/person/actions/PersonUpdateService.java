@@ -1,4 +1,4 @@
-package com.alepe.rest_demo.services;
+package com.alepe.rest_demo.person.actions;
 
 import com.intellisrc.web.Service;
 import spark.Request;

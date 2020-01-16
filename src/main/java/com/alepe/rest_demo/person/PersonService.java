@@ -1,6 +1,6 @@
-package com.alepe.rest_demo;
+package com.alepe.rest_demo.person;
 
-import com.alepe.rest_demo.services.*;
+import com.alepe.rest_demo.person.actions.*;
 import com.intellisrc.web.Service;
 import com.intellisrc.web.ServiciableMultiple;
 

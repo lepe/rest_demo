@@ -1,4 +1,4 @@
-package com.alepe.rest_demo;
+package com.alepe.rest_demo.types;
 
 /**
  * List of available colors

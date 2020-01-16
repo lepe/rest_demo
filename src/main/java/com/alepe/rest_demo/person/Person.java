@@ -1,5 +1,6 @@
-package com.alepe.rest_demo;
+package com.alepe.rest_demo.person;
 
+import com.alepe.rest_demo.types.Color;
 import com.intellisrc.core.Config;
 import com.intellisrc.core.Log;
 import com.intellisrc.core.SysInfo;
