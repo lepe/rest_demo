@@ -75,7 +75,7 @@ public class Person {
     public Person(int id) throws IllegalPersonException {
         this.id = id;
         if(id <= 0) {
-            Log.e("Trying to get a Person with invalid ID: %d", id);
+            Log.w("Trying to get a Person with invalid ID: %d", id);
             throw new IllegalPersonException();
         }
 
@@ -274,6 +274,17 @@ public class Person {
             throw new IllegalPersonException();
         }
         return person;
+    }
+
+    /**
+     * It will receive a Map and will return a Map (after cleaning the input).
+     * If there is an invalid input, it will return a empty Map
+     * @param input : Map (from JSON or Data)
+     * @return a clean Map
+     */
+    //TODO:
+    public Map<String, Object> cleanInputMap(Map<?, ?> input) {
+       return null;
     }
 
     /**

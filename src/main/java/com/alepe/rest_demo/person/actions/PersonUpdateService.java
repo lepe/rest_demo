@@ -32,6 +32,7 @@ public class PersonUpdateService extends Service {
                     var json = JSON.decode(body).toMap();
                     if(!json.isEmpty()) {
                         Log.i("Update Person requested by: %s", request.ip());
+                        //Then update if all is fine
                         for (var key : json.keySet()) {
                             switch (key.toString()) {
                                 case "last_name": break; //Do nothing. It will be covered by "first".

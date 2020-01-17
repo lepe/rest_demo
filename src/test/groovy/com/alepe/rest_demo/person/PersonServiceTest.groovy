@@ -94,7 +94,7 @@ class PersonServiceTest extends Specification {
         when: 'requesting invalid offset and/or limit'
             client.get( path : "/api/v${version}/people/${offset}/${limit}" )
         
-        then: 'server returns 400 code (empty)'
+        then: 'server returns 400 code (Bad Request)'
             HttpResponseException e = thrown(HttpResponseException)
             assert e.response.status == 400: 'response code should be 400 when request is invalid'
         
@@ -143,7 +143,7 @@ class PersonServiceTest extends Specification {
         when: 'requesting invalid id'
             client.get( path : "/api/v${version}/person/AAA" )
         
-        then: 'server returns 400 code (empty)'
+        then: 'server returns 400 code (Bad Request)'
             HttpResponseException e = thrown(HttpResponseException)
             assert e.response.status == 400: 'response code should be 400 when request is invalid'
             
@@ -204,7 +204,42 @@ class PersonServiceTest extends Specification {
         then: "No exception"
             notThrown(Person.IllegalPersonException)
     }
-    
+
+    @SuppressWarnings("GrUnresolvedAccess")
+    @Unroll
+    def 'Create a Person should fail with invalid data' () {
+        when: "Prepare create information"
+            int id = 1
+            client.headers.Token = ""
+            def response = client.put(
+                    path: "/api/v${version}/person/${id}",
+                    body: [
+                            "first_name"      : first,
+                            "last_name"       : last,
+                            "age"             : age,
+                            "favourite_colour": color,
+                            "hobby"           : hobby
+                    ],
+                    requestContentType: ContentType.JSON
+            )
+
+        then: 'server returns 400 code (Bad Request)'
+            HttpResponseException e = thrown(HttpResponseException)
+            assert e.response.status == 400: 'response code should be 400 if input is invalid'
+
+        where: 'Invalid inputs'
+            first | last     | age | color    | hobby
+            ""    | "Sponge" | 22  | "yellow" | ["swimming"]              //Invalid First Name
+            "Bob" | ""       | 5   | "yellow" | ["swimming"]              //Invalid Last Name
+            "Bob" | "Sponge" | 0   | "yellow" | ["swimming"]              //Invalid Age
+            "Bob" | "Sponge" | -1  | "yellow" | ["swimming"]              //Invalid Age
+            "Bob" | "Sponge" | "A" | "yellow" | ["swimming"]              //Invalid Age
+            "Bob" | "Sponge" | 5   | 999999   | ["swimming"]              //Invalid Color
+            "Bob" | "Sponge" | 5   | "lime"   | ["swimming"]              //Invalid Color
+            "Bob" | "Sponge" | 5   | "yellow" | ""                        //Invalid Hobby
+            "Bob" | "Sponge" | 5   | "yellow" | "swimming"                //Invalid Hobby type
+            "Bob" | "Sponge" | 5   | "yellow" | ["swimming": "nothing"]    //Invalid Hobby type
+    }
     /*
      * [PUT] Tests for `/person/id`
      */
@@ -226,11 +261,48 @@ class PersonServiceTest extends Specification {
             )
         
         then: 'server returns 200 code (ok) and response should be as expected'
-            assert response.status == 200 : 'response code should be 200 when adding a person'
+            assert response.status == 200 : 'response code should be 200 when updating a person'
             assert response.responseData.size() > 0 : 'response must have an object'
             assert response.data.ok == true : 'It must return OK = true'
     }
-    
+
+    @SuppressWarnings("GrUnresolvedAccess")
+    @Unroll
+    def 'Update a Person should fail with invalid data' () {
+        when: "Prepare update information"
+            int id = 1
+            client.headers.Token = ""
+            def response = client.put(
+                    path : "/api/v${version}/person/${id}",
+                    body : [
+                            "first_name"        : first,
+                            "last_name"         : last,
+                            "age"               : age,
+                            "favourite_colour"  : color,
+                            "hobby"             : hobby
+                    ],
+                    requestContentType : ContentType.JSON
+            )
+
+        then: 'server returns 400 code (Bad Request)'
+            HttpResponseException e = thrown(HttpResponseException)
+            assert e.response.status == 400 : 'response code should be 400 if input is invalid'
+
+        where: 'Invalid inputs'
+            first   | last      | age | color   | hobby
+            ""      | "Sponge"  | 22  | "yellow"| ["swimming"]              //Invalid First Name
+            "Bob"   | ""        | 5   | "yellow"| ["swimming"]              //Invalid Last Name
+            "Bob"   | "Sponge"  | 0   | "yellow"| ["swimming"]              //Invalid Age
+            "Bob"   | "Sponge"  | -1  | "yellow"| ["swimming"]              //Invalid Age
+            "Bob"   | "Sponge"  | "A" | "yellow"| ["swimming"]              //Invalid Age
+            "Bob"   | "Sponge"  | 5   | 999999  | ["swimming"]              //Invalid Color
+            "Bob"   | "Sponge"  | 5   | "lime"  | ["swimming"]              //Invalid Color
+            "Bob"   | "Sponge"  | 5   | "yellow"| ""                        //Invalid Hobby
+            "Bob"   | "Sponge"  | 5   | "yellow"| "swimming"                //Invalid Hobby type
+            "Bob"   | "Sponge"  | 5   | "yellow"| ["swimming":"nothing"]    //Invalid Hobby type
+
+    }
+
     /*
      * [DELETE] Tests for `/person/id`
      */
@@ -251,7 +323,7 @@ class PersonServiceTest extends Specification {
             )
     
         then: 'server returns 200 code (ok) and response should be as expected'
-            assert response.status == 200 : 'response code should be 200 when adding a person'
+            assert response.status == 200 : 'response code should be 200 when removing a person'
             assert response.responseData.size() > 0 : 'response must have an object'
             assert response.data.ok == true : 'It must return OK = true'
         
@@ -261,5 +333,25 @@ class PersonServiceTest extends Specification {
         then:
             thrown Person.IllegalPersonException
     }
-    
+
+    @SuppressWarnings("GrUnresolvedAccess")
+    def 'Delete a Person should fail with invalid id' () {
+        when: "Delete person with invalid input"
+            def response = client.delete(
+                    path : "/api/v${version}/person/${id}",
+                    requestContentType : ContentType.JSON
+            )
+
+        then: 'server returns 400 code (Bad Request)'
+            HttpResponseException e = thrown(HttpResponseException)
+            assert e.response.status == 400 : 'response code should be 400 if input is invalid'
+
+        where: 'Invalid inputs'
+            id      | _
+            0       | 0
+            -1      | 0
+            99999   | 0
+            "A"     | 0
+    }
+
 }
