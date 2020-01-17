@@ -26,22 +26,24 @@ public class PersonListService extends Service {
                 offset = Integer.parseInt(request.params("offset"));
                 qty = Integer.parseInt(request.params("qty"));
                 // Prevent negative numbers
-                if(offset < 0) {
-                    offset = 0;
-                }
-                // limit the amount of records to download at once
-                if(qty <= 0 || qty > maxRecordsAllowed) {
-                    qty = maxRecordsAllowed;
-                }
-                Log.i("Requesting list: [%d,%d] from %s", offset, qty, request.ip());
-                List<Person> list = Person.getAll(offset, qty);
-                if(list.isEmpty()) {
-                    response.status(204);
-                    Log.w("Records were not found.");
-                } else {
-                    for (Person person : list) {
-                        result.add(person.toMap());
+                if(offset >= 0 && qty > 0) {
+                    // limit the amount of records to download at once
+                    if (qty > maxRecordsAllowed) {
+                        qty = maxRecordsAllowed;
                     }
+                    Log.i("Requesting list: [%d,%d] from %s", offset, qty, request.ip());
+                    List<Person> list = Person.getAll(offset, qty);
+                    if (list.isEmpty()) {
+                        response.status(204);
+                        Log.w("Records were not found.");
+                    } else {
+                        for (Person person : list) {
+                            result.add(person.toMap());
+                        }
+                    }
+                } else {
+                    response.status(400);
+                    Log.w("Requested list parameters were mistaken");
                 }
             } catch (NumberFormatException e) {
                 response.status(400);

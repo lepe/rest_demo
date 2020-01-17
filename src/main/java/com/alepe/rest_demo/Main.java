@@ -7,12 +7,15 @@ import com.intellisrc.core.SysService;
 import com.intellisrc.db.Database;
 import com.intellisrc.web.WebService;
 import groovy.transform.CompileStatic;
+import spark.Service;
 
 /**
  * This class is the main controller of the system.
  */
 @CompileStatic
-class Main extends SysService {
+public class Main extends SysService {
+    public static final int port = 7777;
+    public static boolean running = false;
     /*
      * Static initialization. By Using SysService, we are
      * converting this class into a Service which will run
@@ -56,9 +59,12 @@ class Main extends SysService {
 
         Web Resources are kept in the user directory: resources/
          */
-        ws.port = 7777;
+        ws.port = port;
         ws.setResources(SysInfo.getFile("resources"));
         ws.addService(new PersonService());
+        ws.onStart = (Service service) -> {
+            running = true;
+        };
         ws.start(true);
     }
 
@@ -67,6 +73,7 @@ class Main extends SysService {
      */
     @Override
     public void onStop() {
+        running = false;
         ws.stop();
         Database.quit();
     }

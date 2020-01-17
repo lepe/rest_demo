@@ -51,10 +51,10 @@ public class Person {
 
         DB db = Database.connect();
         Map<String, Object> row = new HashMap<>();
-        row.put("first", firstName);
-        row.put("last", lastName);
+        row.put("first_name", firstName);
+        row.put("last_name", lastName);
         row.put("age", age);
-        row.put("color", favouriteColor.toString());
+        row.put("favourite_colour", favouriteColor.toString());
         row.put("hobby", String.join(",", hobby));
         boolean inserted = db.table(table).insert(row);
         id = db.getLastID();
@@ -89,10 +89,10 @@ public class Person {
         }
 
         HashMap<Object, Object> personMap = new HashMap<Object, Object>(row.toMap());
-        this.firstName      = personMap.get("first").toString();
-        this.lastName       = personMap.get("last").toString();
+        this.firstName      = personMap.get("first_name").toString();
+        this.lastName       = personMap.get("last_name").toString();
         this.age            = (Integer) personMap.get("age");
-        this.favouriteColor = Color.fromString(personMap.get("color").toString());
+        this.favouriteColor = Color.fromString(personMap.get("favourite_colour").toString());
         String hobbies      = personMap.get("hobby").toString();
         if(!hobbies.isEmpty()) {
             this.hobby      = hobbies.split(",");
@@ -115,7 +115,7 @@ public class Person {
         boolean ok = false;
         if(isValid() &&! newFirstName.isEmpty() &&! newLastName.isEmpty()) {
             DB db = Database.connect();
-            ok = db.table(table).key("id").update(Map.of("first", newFirstName, "last", newLastName), id);
+            ok = db.table(table).key("id").update(Map.of("first_name", newFirstName, "last_name", newLastName), id);
             if(ok) {
                 firstName = newFirstName;
                 lastName = newLastName;
@@ -154,7 +154,7 @@ public class Person {
         boolean ok = false;
         if(isValid()) {
             DB db = Database.connect();
-            ok = db.table(table).key("id").update(Map.of("color", color.toString()), id);
+            ok = db.table(table).key("id").update(Map.of("favourite_colour", color.toString()), id);
             db.close();
             if(ok) {
                 favouriteColor = color;
@@ -219,10 +219,10 @@ public class Person {
     public Map<String, Object> toMap() {
         Map<String, Object> personMap = new HashMap<>();
         personMap.put("id"      , id);
-        personMap.put("first"   , firstName);
-        personMap.put("last"    , lastName);
+        personMap.put("first_name"   , firstName);
+        personMap.put("last_name"    , lastName);
         personMap.put("age"     , age);
-        personMap.put("color"   , favouriteColor.toString());
+        personMap.put("favourite_colour"   , favouriteColor.toString());
         personMap.put("hobby"   , hobby);
         return personMap;
     }
@@ -254,10 +254,10 @@ public class Person {
         HashMap<?, ?> personMap = new HashMap<>(map);
         try {
             person.id = Integer.parseInt(personMap.get("id").toString());
-            person.firstName = personMap.get("first").toString();
-            person.lastName = personMap.get("last").toString();
+            person.firstName = personMap.get("first_name").toString();
+            person.lastName = personMap.get("last_name").toString();
             person.age = (Integer) personMap.get("age");
-            person.favouriteColor = Color.fromString(personMap.get("color").toString());
+            person.favouriteColor = Color.fromString(personMap.get("favourite_colour").toString());
             String hobbies = personMap.get("hobby").toString();
             if (!hobbies.isEmpty()) {
                 person.hobby = hobbies.split(",");
@@ -299,7 +299,7 @@ public class Person {
         if(!search.isEmpty()) {
             Log.i("Searching for: %s", search);
             search = "%" + search + "%";
-            Data rows = db.table(table).where("lower(`first`) LIKE ? or lower(`last`) LIKE ?", search, search).get();
+            Data rows = db.table(table).where("lower(`first_name`) LIKE ? or lower(`last_name`) LIKE ?", search, search).get();
             result = fromData(rows);
             db.close();
         }
