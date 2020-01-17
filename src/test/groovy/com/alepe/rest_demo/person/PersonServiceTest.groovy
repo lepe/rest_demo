@@ -1,6 +1,7 @@
 package com.alepe.rest_demo.person
 
 import com.alepe.rest_demo.Main
+import com.alepe.rest_demo.types.Color
 import groovyx.net.http.ContentType
 import groovyx.net.http.HttpResponseException
 import groovyx.net.http.RESTClient
@@ -24,10 +25,17 @@ class PersonServiceTest extends Specification {
      * Launch service if its not running
      */
     def launchService() {
+        // If the port is available it means it is not running. Launch it.
+        if(NetworkInterface.isPortAvailable(main.port)) {
             main.onStart()
-            while(!main.running) {
+            while (!main.running) {
                 sleep(1000) //Wait until server is up
             }
+        }
+    }
+    
+    def setup() {
+        launchService()
     }
     
     /*
@@ -169,8 +177,7 @@ class PersonServiceTest extends Specification {
      * [POST] Tests for `/person`
      */
     @SuppressWarnings("GrUnresolvedAccess")
-    @Unroll //Report each case separately
-    def 'Post' () {
+    def 'It should be able to create a Person and it must return 200 as status' () {
         when: 'Add new record'
             client.headers.Token = ""
             def response = client.post(
@@ -184,28 +191,75 @@ class PersonServiceTest extends Specification {
                     ],
                     requestContentType : ContentType.JSON
             )
-        then: 'server returns 200 code (ok)'
+        
+        then: 'server returns 200 code (ok) and response should be as expected'
             assert response.status == 200 : 'response code should be 200 when adding a person'
             assert response.responseData.size() > 0 : 'response must have an object'
+            assert response.data.id > 0 : 'It must return the new ID'
+            assert response.data.ok == true : 'It must return OK = true'
+        
+        when: "Be sure it was created... now remove it"
+            assert new Person(response.data.id).delete()
+        
+        then: "No exception"
+            notThrown(Person.IllegalPersonException)
     }
     
     /*
      * [PUT] Tests for `/person/id`
      */
-    def 'Put' () {
-        client.options(path : "/api/v${version}/auth")
-        client.put([
-            "favourite_colour": "red",
-            "hobby": ["meditation"]
-        ])
+    @SuppressWarnings("GrUnresolvedAccess")
+    def 'Fields should be updated accordingly' () {
+        when: "Prepare update information"
+            int id = 1
+            client.headers.Token = ""
+            def response = client.put(
+                path : "/api/v${version}/person/${id}",
+                body : [
+                    "first_name"        : "Alfred",
+                    "last_name"         : "Wilson",
+                    "age"               : 78,
+                    "favourite_colour"  : "red",
+                    "hobby"             : ["meditation"]
+                ],
+                requestContentType : ContentType.JSON
+            )
+        
+        then: 'server returns 200 code (ok) and response should be as expected'
+            assert response.status == 200 : 'response code should be 200 when adding a person'
+            assert response.responseData.size() > 0 : 'response must have an object'
+            assert response.data.ok == true : 'It must return OK = true'
     }
     
     /*
      * [DELETE] Tests for `/person/id`
      */
-    def 'Delete' () {
-        client.options(path : "")
-        client.delete([:])
+    @SuppressWarnings("GrUnresolvedAccess")
+    def 'Delete a Person' () {
+        setup: "Create a Person"
+            Person.initDB()
+            Color colorObj = Color.fromString("red")
+            String[] hobby = ["reading"]
+            Person person = new Person("Paula", "Siemens", 22, colorObj, hobby)
+            assert person.id
+        
+        when: "Delete person"
+            client.headers.Token = ""
+            def response = client.delete(
+                    path : "/api/v${version}/person/${person.id}",
+                    requestContentType : ContentType.JSON
+            )
+    
+        then: 'server returns 200 code (ok) and response should be as expected'
+            assert response.status == 200 : 'response code should be 200 when adding a person'
+            assert response.responseData.size() > 0 : 'response must have an object'
+            assert response.data.ok == true : 'It must return OK = true'
+        
+        when: "Verify that it was removed"
+            //noinspection GroovyResultOfObjectAllocationIgnored
+            new Person(person.id)
+        then:
+            thrown Person.IllegalPersonException
     }
     
 }

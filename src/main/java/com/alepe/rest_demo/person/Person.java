@@ -106,6 +106,13 @@ public class Person {
     private Person() {}
 
     /**
+     * Get the ID
+     * @return Person's id
+     */
+    public int getId() {
+        return id;
+    }
+    /**
      * Updates a Person's name
      * @param newFirstName : first name
      * @param newLastName : last name
@@ -256,7 +263,7 @@ public class Person {
             person.id = Integer.parseInt(personMap.get("id").toString());
             person.firstName = personMap.get("first_name").toString();
             person.lastName = personMap.get("last_name").toString();
-            person.age = (Integer) personMap.get("age");
+            person.age = Integer.parseInt(personMap.get("age").toString().replaceAll("\\..*",""));
             person.favouriteColor = Color.fromString(personMap.get("favourite_colour").toString());
             String hobbies = personMap.get("hobby").toString();
             if (!hobbies.isEmpty()) {

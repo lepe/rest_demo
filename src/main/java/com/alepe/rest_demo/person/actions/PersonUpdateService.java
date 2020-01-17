@@ -34,15 +34,15 @@ public class PersonUpdateService extends Service {
                         Log.i("Update Person requested by: %s", request.ip());
                         for (var key : json.keySet()) {
                             switch (key.toString()) {
-                                case "last": break; //Do nothing. It will be covered by "first".
-                                case "first" :
-                                    person.updateName(json.get("first").toString(), json.get("last").toString());
+                                case "last_name": break; //Do nothing. It will be covered by "first".
+                                case "first_name" :
+                                    ok = person.updateName(json.get("first_name").toString(), json.get("last_name").toString());
                                     break;
                                 case "age" :
-                                    person.updateAge((Integer) json.get("age"));
+                                    ok = person.updateAge(Integer.parseInt(json.get("age").toString().replaceAll("\\..*","")));
                                     break;
-                                case "color":
-                                    person.updateColor(Color.fromString(json.get("color").toString()));
+                                case "favourite_colour":
+                                    ok = person.updateColor(Color.fromString(json.get("favourite_colour").toString()));
                                     break;
                                 default:
                                     Log.w("Unidentified key: %s", key.toString());

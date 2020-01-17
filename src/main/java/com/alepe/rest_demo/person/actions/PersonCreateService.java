@@ -20,6 +20,7 @@ public class PersonCreateService extends Service {
         setMethod(Service.Method.POST);
         setPath(path);
         setAction((ActionRequestResponse) (Request request, Response response) -> {
+            int id = 0;
             boolean ok = false;
             String err = "";
             String body = request.body().trim();
@@ -37,7 +38,7 @@ public class PersonCreateService extends Service {
                     Person personMap;
                     try {
                         personMap = Person.fromMap(map);
-                        Person.clone(personMap);
+                        id = Person.clone(personMap).getId();
                         ok = true;
                     } catch (Person.IllegalPersonException exception) {
                         response.status(400);
@@ -55,7 +56,7 @@ public class PersonCreateService extends Service {
             if(! err.isEmpty()) {
                 Log.w("err");
             }
-            return (Map<String, ?>) Map.of("ok", ok, "err", err);
+            return (Map<String, ?>) Map.of("ok", ok, "id", id, "err", err);
         });
     }
 }

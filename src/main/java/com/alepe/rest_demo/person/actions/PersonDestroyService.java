@@ -21,7 +21,7 @@ public class PersonDestroyService extends Service {
             String err = "";
             int id;
             try {
-                id = Integer.parseInt(request.queryParams("id"));
+                id = Integer.parseInt(request.params("id"));
                 Person person = new Person(id);
                 ok = person.delete();
             } catch(NumberFormatException | Person.IllegalPersonException exception) {
