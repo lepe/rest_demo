@@ -45,8 +45,7 @@ public class AuthService implements ServiciableAuth {
         return (Request request) -> {
             if (request.session() != null) {
                 try {
-                    //Log.s("Got cookie: %s", request.headers("Cookie"));
-                    return request.ip() == request.session().attribute("ip") &&
+                    return request.ip().equals(request.session().attribute("ip")) &&
                             Level.valueOf(request.session().attribute("level").toString().toUpperCase()) == Level.ADMIN;
                 } catch (Exception e) {
                     Log.e("Error during authorization", e);

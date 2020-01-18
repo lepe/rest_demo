@@ -329,12 +329,15 @@ class PersonAPITest extends Specification {
     @Unroll
     def 'Create a Person should fail with invalid data' () {
         setup: 'Login'
-            login()
+            List<String> cookies = login()
 
         when: "Prepare create information"
             int id = 1
             def response = client.post(
                     path: "/api/v${version}/person",
+                    headers : [
+                            "Cookie"  : cookies.join(";")
+                    ],
                     body: [
                             "first_name"      : first,
                             "last_name"       : last,
@@ -368,12 +371,15 @@ class PersonAPITest extends Specification {
     @Unroll
     def 'Update should be updated accordingly with valid data' () {
         setup: 'Login'
-            login()
+            List<String> cookies = login()
 
         when: "Prepare update information"
             int id = 1
             def response = client.put(
                 path : "/api/v${version}/person/${id}",
+                headers : [
+                        "Cookie"  : cookies.join(";")
+                ],
                 body : [
                     "first_name"        : first,
                     "last_name"         : last,
@@ -405,12 +411,15 @@ class PersonAPITest extends Specification {
     @Unroll
     def 'Update a Person should fail with invalid data' () {
         setup: 'Login'
-            login()
+            List<String> cookies = login()
 
         when: "Prepare update information"
             int id = 1
             def response = client.put(
                     path : "/api/v${version}/person/${id}",
+                    headers : [
+                            "Cookie"  : cookies.join(";")
+                    ],
                     body : [
                             "first_name"        : first,
                             "last_name"         : last,
@@ -474,11 +483,14 @@ class PersonAPITest extends Specification {
     @SuppressWarnings("GrUnresolvedAccess")
     def 'Delete a Person should fail with invalid id' () {
         setup: 'Login'
-            login()
+            List<String> cookies = login()
 
         when: "Delete person with invalid input"
             def response = client.delete(
-                    path : "/api/v${version}/person/${id}"
+                    path : "/api/v${version}/person/${id}",
+                    headers : [
+                            "Cookie"  : cookies.join(";")
+                    ]
             )
 
         then: 'server returns 400 code (Bad Request)'
