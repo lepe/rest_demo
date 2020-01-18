@@ -28,15 +28,13 @@ public class PersonCreateService extends Service {
                 // Import json and convert it into HashMap with string keys:
                 var json = JSON.decode(body).toMap();
                 if(!json.isEmpty()) {
-                    HashMap<String, Object> map = new HashMap<>();
-                    for (var key : json.keySet()) {
-                        map.put(key.toString(), json.get(key));
-                    }
-                    map.put("id", 0); //Prevent it from being set.
-
-                    // Import map into Person and clone it:
-                    Person personMap;
+                    HashMap<String, Object> map;
                     try {
+                        map = Person.cleanInputMap(json);
+                        map.put("id", 0); //Prevent it from being set.
+
+                        // Import map into Person and clone it:
+                        Person personMap;
                         personMap = Person.fromMap(map);
                         id = Person.clone(personMap).getId();
                         ok = true;

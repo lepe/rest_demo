@@ -121,11 +121,11 @@ class PersonServiceTest extends Specification {
             assert response.status == 200 : 'response code should be 200 when getting one person'
             assert response.responseData.size() > 0 : 'response must have an object'
             assert response.contentType == 'application/json' : 'response should be in json format'
-            assert response.data.first : 'First name should be in the response'
-            assert response.data.last  : 'Last name should be in the response'
-            assert response.data.age   : 'Age should be in the response'
-            assert response.data.color : 'Color should be in the response'
-            assert response.data.hobby : 'Hobby list should be in the response'
+            assert response.data.first_name       : 'First name should be in the response'
+            assert response.data.last_name        : 'Last name should be in the response'
+            assert response.data.age              : 'Age should be in the response'
+            assert response.data.favourite_colour : 'Color should be in the response'
+            assert response.data.hobby            : 'Hobby list should be in the response'
     }
     
     @SuppressWarnings("GrUnresolvedAccess")
@@ -177,17 +177,18 @@ class PersonServiceTest extends Specification {
      * [POST] Tests for `/person`
      */
     @SuppressWarnings("GrUnresolvedAccess")
+    @Unroll
     def 'It should be able to create a Person and it must return 200 as status' () {
         when: 'Add new record'
             client.headers.Token = ""
             def response = client.post(
                     path: "/api/v${version}/person",
                     body : [
-                        "first_name"        : "Sarah",
-                        "last_name"         : "Robinson",
-                        "age"               : 54,
-                        "favourite_colour"  : "blue",
-                        "hobby"             : ["chess"]
+                        "first_name"        : first,
+                        "last_name"         : last,
+                        "age"               : age,
+                        "favourite_colour"  : color,
+                        "hobby"             : hobby
                     ],
                     requestContentType : ContentType.JSON
             )
@@ -203,6 +204,14 @@ class PersonServiceTest extends Specification {
         
         then: "No exception"
             notThrown(Person.IllegalPersonException)
+
+        where: 'Valid inputs'
+            first    | last     | age | color    | hobby
+            "Mega"   | "Stone"  | 29  | "yellow" | ["dancing"]
+            "Teresa" | "Wang"   | 8   | "lime"   | ["reading"] // Invalid color will translate into "none"
+            "Britney"| "Spears" | 1   | ""       | ["singing"] // Empty color should be converted into "none"
+            "Mel"    | "Martin" | 5   | "orange" | "swimming"  // Hobby can also be specified as String
+            "Isla"   | "Fisher" | 35  | "red"    | []          // Empty hobby should be fine
     }
 
     @SuppressWarnings("GrUnresolvedAccess")
@@ -211,8 +220,8 @@ class PersonServiceTest extends Specification {
         when: "Prepare create information"
             int id = 1
             client.headers.Token = ""
-            def response = client.put(
-                    path: "/api/v${version}/person/${id}",
+            def response = client.post(
+                    path: "/api/v${version}/person",
                     body: [
                             "first_name"      : first,
                             "last_name"       : last,
@@ -229,33 +238,30 @@ class PersonServiceTest extends Specification {
 
         where: 'Invalid inputs'
             first | last     | age | color    | hobby
-            ""    | "Sponge" | 22  | "yellow" | ["swimming"]              //Invalid First Name
-            "Bob" | ""       | 5   | "yellow" | ["swimming"]              //Invalid Last Name
-            "Bob" | "Sponge" | 0   | "yellow" | ["swimming"]              //Invalid Age
-            "Bob" | "Sponge" | -1  | "yellow" | ["swimming"]              //Invalid Age
-            "Bob" | "Sponge" | "A" | "yellow" | ["swimming"]              //Invalid Age
-            "Bob" | "Sponge" | 5   | 999999   | ["swimming"]              //Invalid Color
-            "Bob" | "Sponge" | 5   | "lime"   | ["swimming"]              //Invalid Color
-            "Bob" | "Sponge" | 5   | "yellow" | ""                        //Invalid Hobby
-            "Bob" | "Sponge" | 5   | "yellow" | "swimming"                //Invalid Hobby type
-            "Bob" | "Sponge" | 5   | "yellow" | ["swimming": "nothing"]    //Invalid Hobby type
+            ""    | "Martin" | 22  | "orange" | ["swimming"]              //Invalid First Name
+            "Mel" | ""       | 5   | "orange" | ["swimming"]              //Invalid Last Name
+            "Mel" | "Martin" | 0   | "orange" | ["swimming"]              //Invalid Age
+            "Mel" | "Martin" | -1  | "orange" | ["swimming"]              //Invalid Age
+            "Mel" | "Martin" | "A" | "orange" | ["swimming"]              //Invalid Age
+            "Mel" | "Martin" | 5   | "orange" | ["swimming": "nothing"]   //Invalid Hobby type (Map)
     }
     /*
      * [PUT] Tests for `/person/id`
      */
     @SuppressWarnings("GrUnresolvedAccess")
-    def 'Fields should be updated accordingly' () {
+    @Unroll
+    def 'Update should be updated accordingly with valid data' () {
         when: "Prepare update information"
             int id = 1
             client.headers.Token = ""
             def response = client.put(
                 path : "/api/v${version}/person/${id}",
                 body : [
-                    "first_name"        : "Alfred",
-                    "last_name"         : "Wilson",
-                    "age"               : 78,
-                    "favourite_colour"  : "red",
-                    "hobby"             : ["meditation"]
+                    "first_name"        : first,
+                    "last_name"         : last,
+                    "age"               : age,
+                    "favourite_colour"  : color,
+                    "hobby"             : hobby
                 ],
                 requestContentType : ContentType.JSON
             )
@@ -264,6 +270,14 @@ class PersonServiceTest extends Specification {
             assert response.status == 200 : 'response code should be 200 when updating a person'
             assert response.responseData.size() > 0 : 'response must have an object'
             assert response.data.ok == true : 'It must return OK = true'
+
+        where: 'Valid inputs'
+            first    | last     | age | color    | hobby
+            "Albert" | "Wilson" | 78  | "black"  | ["meditation"]
+            "Mike"   | "Fowler" | 18  | "navy"   | ["sports"]  // Invalid color will translate into "none"
+            "Kerry"  | "Haynes" | 100 | ""       | ["running"] // Empty color should be converted into "none"
+            "Stacy"  | "Vega"   | 88  | "orange" | "cycling"   // Hobby can also be specified as String
+            "Diane"  | "Moore"  | 45  | "pink"   | []          // Empty hobby should be fine
     }
 
     @SuppressWarnings("GrUnresolvedAccess")
@@ -295,12 +309,7 @@ class PersonServiceTest extends Specification {
             "Bob"   | "Sponge"  | 0   | "yellow"| ["swimming"]              //Invalid Age
             "Bob"   | "Sponge"  | -1  | "yellow"| ["swimming"]              //Invalid Age
             "Bob"   | "Sponge"  | "A" | "yellow"| ["swimming"]              //Invalid Age
-            "Bob"   | "Sponge"  | 5   | 999999  | ["swimming"]              //Invalid Color
-            "Bob"   | "Sponge"  | 5   | "lime"  | ["swimming"]              //Invalid Color
-            "Bob"   | "Sponge"  | 5   | "yellow"| ""                        //Invalid Hobby
-            "Bob"   | "Sponge"  | 5   | "yellow"| "swimming"                //Invalid Hobby type
-            "Bob"   | "Sponge"  | 5   | "yellow"| ["swimming":"nothing"]    //Invalid Hobby type
-
+            "Bob"   | "Sponge"  | 5   | "yellow"| ["swimming":"nothing"]    //Invalid Hobby type (Map)
     }
 
     /*

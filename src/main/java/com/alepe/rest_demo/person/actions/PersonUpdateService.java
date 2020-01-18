@@ -29,24 +29,27 @@ public class PersonUpdateService extends Service {
                 if(! body.isEmpty()) {
                     Person person = new Person(id);
                     // Import json and convert it into HashMap with string keys:
-                    var json = JSON.decode(body).toMap();
-                    if(!json.isEmpty()) {
+                    HashMap<String, Object> clean = Person.cleanInputMap(JSON.decode(body).toMap());
+                    if(!clean.isEmpty()) {
                         Log.i("Update Person requested by: %s", request.ip());
                         //Then update if all is fine
-                        for (var key : json.keySet()) {
-                            switch (key.toString()) {
+                        for (var key : clean.keySet()) {
+                            switch (key) {
                                 case "last_name": break; //Do nothing. It will be covered by "first".
                                 case "first_name" :
-                                    ok = person.updateName(json.get("first_name").toString(), json.get("last_name").toString());
+                                    ok = person.updateName(clean.get("first_name").toString(), clean.get("last_name").toString());
                                     break;
                                 case "age" :
-                                    ok = person.updateAge(Integer.parseInt(json.get("age").toString().replaceAll("\\..*","")));
+                                    ok = person.updateAge((Integer) clean.get("age"));
                                     break;
                                 case "favourite_colour":
-                                    ok = person.updateColor(Color.fromString(json.get("favourite_colour").toString()));
+                                    ok = person.updateColor((Color) clean.get("favourite_colour"));
+                                    break;
+                                case "hobby":
+                                    ok = person.updHobbies((String[]) clean.get("hobby"));
                                     break;
                                 default:
-                                    Log.w("Unidentified key: %s", key.toString());
+                                    Log.w("Unidentified key: %s", key);
                             }
                         }
 

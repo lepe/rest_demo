@@ -43,6 +43,10 @@ public class Person {
      * @throws IllegalPersonException : Unable to create Person in database
      */
     public Person(String firstName, String lastName, int age, Color favouriteColor, String[] hobby) throws IllegalPersonException {
+        if(firstName.isEmpty() || lastName.isEmpty() || age <= 0) {
+            Log.w("First name: %s, Last name: %s or Age: %d is invalid", firstName, lastName, age);
+            throw new IllegalPersonException();
+        }
         this.firstName = firstName;
         this.lastName = lastName;
         this.age = age;
@@ -88,15 +92,12 @@ public class Person {
             throw new IllegalPersonException();
         }
 
-        HashMap<Object, Object> personMap = new HashMap<Object, Object>(row.toMap());
-        this.firstName      = personMap.get("first_name").toString();
-        this.lastName       = personMap.get("last_name").toString();
-        this.age            = (Integer) personMap.get("age");
-        this.favouriteColor = Color.fromString(personMap.get("favourite_colour").toString());
-        String hobbies      = personMap.get("hobby").toString();
-        if(!hobbies.isEmpty()) {
-            this.hobby      = hobbies.split(",");
-        }
+        HashMap<String, Object> personMap = cleanInputMap(row.toMap());
+        this.firstName = personMap.get("first_name").toString();
+        this.lastName = personMap.get("last_name").toString();
+        this.age = (Integer) personMap.get("age");
+        this.favouriteColor = (Color) personMap.get("favourite_colour");
+        this.hobby = (String[]) personMap.get("hobby");
     }
 
     /**
@@ -225,12 +226,12 @@ public class Person {
      */
     public Map<String, Object> toMap() {
         Map<String, Object> personMap = new HashMap<>();
-        personMap.put("id"      , id);
-        personMap.put("first_name"   , firstName);
-        personMap.put("last_name"    , lastName);
-        personMap.put("age"     , age);
-        personMap.put("favourite_colour"   , favouriteColor.toString());
-        personMap.put("hobby"   , hobby);
+        personMap.put("id"              , id);
+        personMap.put("first_name"      , firstName);
+        personMap.put("last_name"       , lastName);
+        personMap.put("age"             , age);
+        personMap.put("favourite_colour", favouriteColor.toString());
+        personMap.put("hobby"           , hobby);
         return personMap;
     }
 
@@ -258,21 +259,13 @@ public class Person {
      */
     static public Person fromMap(Map<?,?> map) throws IllegalPersonException {
         Person person = new Person();
-        HashMap<?, ?> personMap = new HashMap<>(map);
-        try {
-            person.id = Integer.parseInt(personMap.get("id").toString());
-            person.firstName = personMap.get("first_name").toString();
-            person.lastName = personMap.get("last_name").toString();
-            person.age = Integer.parseInt(personMap.get("age").toString().replaceAll("\\..*",""));
-            person.favouriteColor = Color.fromString(personMap.get("favourite_colour").toString());
-            String hobbies = personMap.get("hobby").toString();
-            if (!hobbies.isEmpty()) {
-                person.hobby = hobbies.split(",");
-            }
-        } catch (Exception e) {
-            Log.e("Unable to import Person from Map", e);
-            throw new IllegalPersonException();
-        }
+        HashMap<String, Object> personMap = cleanInputMap(map);
+        person.id = (Integer) personMap.get("id");
+        person.firstName = personMap.get("first_name").toString();
+        person.lastName = personMap.get("last_name").toString();
+        person.age = (Integer) personMap.get("age");
+        person.favouriteColor = (Color) personMap.get("favourite_colour");
+        person.hobby = (String[]) personMap.get("hobby");
         return person;
     }
 
@@ -282,9 +275,80 @@ public class Person {
      * @param input : Map (from JSON or Data)
      * @return a clean Map
      */
-    //TODO:
-    public Map<String, Object> cleanInputMap(Map<?, ?> input) {
-       return null;
+    public static HashMap<String, Object> cleanInputMap(Map<?, ?> input) throws IllegalPersonException {
+        HashMap<String, Object> cleanMap = new HashMap<>();
+        boolean ok = true;
+        for (var inKey : input.keySet()) {
+            String key = inKey.toString();
+            switch (key) {
+                case "id":
+                    cleanMap.put(key, Integer.parseInt(input.get(key).toString()));
+                    break;
+                case "last_name":
+                case "first_name" :
+                    String name = input.get(key).toString().trim().replaceAll("[^a-z A-Z]", "");
+                    if(! name.isEmpty()) {
+                        cleanMap.put(key, name);
+                    } else {
+                        Log.w("%s value was invalid: %s", key, input.get(key).toString());
+                        ok = false;
+                    }
+                    break;
+                case "age" :
+                    try {
+                        int age = Integer.parseInt(input.get(key).toString().replaceAll("\\..*", ""));
+                        if (age > 0) {
+                            cleanMap.put(key, age);
+                        } else {
+                            ok = false;
+                        }
+                    } catch (NumberFormatException ignored) {
+                        Log.w("Age value was invalid: %s", input.get(key).toString());
+                        ok = false;
+                    }
+                    break;
+                case "favourite_colour":
+                    Color color = Color.fromString(input.get(key).toString());
+                    cleanMap.put(key, color);
+                    break;
+                case "hobby":
+                    String[] hobbies = new String[0];
+                    if(input.get(key) instanceof String[]) {
+                        hobbies = (String[]) input.get(key);
+                    } else if(input.get(key) instanceof ArrayList) {
+                         ArrayList<?> list = (ArrayList<?>) input.get(key);
+                         hobbies = new String[list.size()];
+                         for(int i = 0; i < list.size(); i++) {
+                             hobbies[i] = list.get(i).toString();
+                         }
+                    } else if (input.get(key) instanceof String) {
+                        String hobby = ((String) input.get(key)).trim();
+                        if(! hobby.isEmpty()) {
+                            if(hobby.matches("[a-zA-Z ,]+")) {
+                                hobbies = hobby.split(",");
+                            } else {
+                                Log.w("Hobby [%s] contained unknown characters.", hobby);
+                                ok= false;
+                            }
+                        }
+                    } else {
+                        ok = false;
+                        Log.w("Hobby [%s] was of wrong type");
+                    }
+                    if(ok) {
+                        cleanMap.put(key, hobbies);
+                    }
+                    break;
+                default:
+                    Log.w("Unidentified key: %s", key);
+                    ok = false;
+            }
+        }
+        if(!ok) {
+            Log.w("Input map contained incorrect data");
+            throw new IllegalPersonException();
+        }
+        return cleanMap;
     }
 
     /**
