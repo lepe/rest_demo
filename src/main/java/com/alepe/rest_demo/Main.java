@@ -61,7 +61,7 @@ public class Main extends SysService {
         Web Resources are kept in the user directory: resources/
          */
         ws.port = port;
-        ws.setResources(SysInfo.getFile("resources"));
+        ws.setResources(SysInfo.getFile("resources","public"));
         ws.addService(new AuthService());
         ws.addService(new PersonAPI());
         ws.onStart = (Service service) -> {

@@ -145,6 +145,18 @@ Alternatively you can run: `gradle shadowJar`
 ### How to run tests:
 * Execute: `gradle test`
 
+It will display:
+```
+<===========--> 88% EXECUTING [39s]
+> :test > 50 tests completed
+> :test > Executing test com.alepe.rest_demo.person.PersonAPITest
+```
+Finally:
+```
+BUILD SUCCESSFUL in 42s
+3 actionable tasks: 1 executed, 2 up-to-date
+```
+
 ### How to deploy:
 * Execute: `./deploy [ip|hostname]`
 This script will synchronize with the target host and copy the

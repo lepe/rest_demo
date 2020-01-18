@@ -36,9 +36,9 @@ class PersonTest extends Specification {
                 dbFile.delete()
             }
             Person.initDB()
-        
+
         expect: "Database file must exists and we must be able to get at least 1 person"
-            assert dbFile.exists()
+            assert dbFile.exists() //TODO: sometimes its reporting failure here when running from gradle. check why
             assert ! dbFile.empty
             assert ! Person.getAll(0, 1).empty
         

@@ -1,0 +1,91 @@
+// General sections and components
+html {
+    background: white;
+    * {
+        box-sizing: border-box;
+        font-family: verdana, sans-serif;
+        font-size: 16px;
+    }
+    body {
+        margin: 0;
+        padding: 0;
+        display: grid;
+        grid-template-areas: "header header header header" "main main main side" "footer footer footer footer";
+        grid-gap: 0;
+        header {
+            grid-area: header;
+            background-color: $main_color;
+            color: white;
+            height: 50px;
+            h1 {
+                margin: 12px;
+                font-size: 20px;
+            }
+        }
+        article {
+            grid-area: main;
+            height: calc(100vh - 100px);
+            background: $sub_color;
+            h2 {
+                margin: 20px 20px 0 20px;
+                background: $main_color;
+                color: white;
+                padding: 10px 10px 10px 20px;
+                height: 40px;
+            }
+            #table {
+                background: white;
+                margin: 0 20px 20px 20px;
+                padding: 10px;
+                height: calc(100vh - 180px);
+                overflow-x: hidden;
+                overflow-y: auto;
+                ul {
+                    margin: 0;
+                    padding: 0;
+                    li:nth-child(even) {
+                        background-color: #f2f2f2;
+                    }
+                    li {
+                        list-style: none;
+                        padding: 10px;
+                    }
+                }
+            }
+        }
+        aside {
+            grid-area: side;
+            #photo {
+                width: 200px;
+                height: 200px;
+                margin: 20px auto;
+                display: block;
+                border: 4px solid $main_color;
+                padding: 2px;
+            }
+            #profile {
+                margin: 10px;
+                div {
+                    margin: 10px;
+                    background: $sub_color;
+                    label {
+                        padding: 10px;
+                        display: inline-block;
+                        background: $main_color;
+                        color: white;
+                        width: 40%;
+                    }
+                    span {
+                        padding: 10px;
+                        display: inline-block;
+                    }
+                }
+            }
+        }
+        footer {
+            grid-area: footer;
+            height: 50px;
+            background: $main_color;
+        }
+    }
+}
