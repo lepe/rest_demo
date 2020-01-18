@@ -1,5 +1,6 @@
 package com.alepe.rest_demo.person.actions;
 
+import com.alepe.rest_demo.auth.AuthService;
 import com.alepe.rest_demo.person.Person;
 import com.alepe.rest_demo.types.Color;
 import com.intellisrc.core.Log;
@@ -13,12 +14,14 @@ import java.util.Map;
 
 /**
  * Provides the service to update Person objects
+ * Access: Private
  * @since 2020/01/15.
  */
 public class PersonUpdateService extends Service {
     public PersonUpdateService(String path) {
         setMethod(Service.Method.PUT);
         setPath(path);
+        setAllow(AuthService.allowAdmin()); //Only authorized users can perform this action
         setAction((ActionRequestResponse) (Request request, Response response) -> {
             boolean ok = false;
             String err = "";

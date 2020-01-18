@@ -25,3 +25,9 @@ INSERT INTO `person` (`first_name`,`last_name`,`age`,`favourite_colour`,`hobby`)
 INSERT INTO `person` (`first_name`,`last_name`,`age`,`favourite_colour`,`hobby`) VALUES("Colin", "Lymon", 28, "green", "animal care,bowling,dancing");
 INSERT INTO `person` (`first_name`,`last_name`,`age`,`favourite_colour`,`hobby`) VALUES("Leonila", "Wein", 29, "red", "tennis,theater,movies");
 INSERT INTO `person` (`first_name`,`last_name`,`age`,`favourite_colour`,`hobby`) VALUES("Lien", "Dileo", 27, "black", "volunteer work,animal care");
+
+CREATE TABLE `auth` (
+`user` VARCHAR(20) PRIMARY KEY NOT NULL,
+`pass` VARCHAR(60)
+);
+INSERT INTO `auth` (`user`,`pass`) VALUES ("admin", "UCDMOzHjLRTMaCbBSkvfLOzF/5CWhDivPGUWYGucl57tXlgCH/atu");

@@ -1,5 +1,6 @@
 package com.alepe.rest_demo.person
 
+import com.intellisrc.core.Log
 import com.alepe.rest_demo.Main
 import com.alepe.rest_demo.types.Color
 import groovyx.net.http.ContentType
@@ -13,14 +14,43 @@ import spock.lang.Unroll
  * This is an integration test for PersonService (and the general API system)
  * @since 2020/01/17.
  */
-class PersonServiceTest extends Specification {
+class PersonAPITest extends Specification {
     @Shared
-    int version = PersonService.version
+    int version = PersonAPI.version
     @Shared
     Main main = new Main()
     @Shared
     def client = new RESTClient( "http://localhost:" + main.port)
-    
+    /**
+     * Login into system
+     * This is used to be able to execute restricted services.
+     * @return cookies
+     */
+    @SuppressWarnings("GrUnresolvedAccess")
+    List<String> login() {
+        def response = client.post(
+                path: "/api/v${version}/auth/login",
+                body: [
+                        user : "admin",
+                        pass : "admin"
+                ],
+                requestContentType : ContentType.JSON
+        )
+        List<String> cookies = []
+        response.getHeaders('Set-Cookie').each {
+            //Log.s("Set cookie: %s", it.value.toString())
+            cookies.add(it.value.toString().split(';')[0])
+        }
+        return cookies
+    }
+    /**
+     * Logout from system
+     * @return
+     */
+    def logout() {
+        client.get(path : "/api/v${version}/auth/logout")
+    }
+
     /**
      * Launch service if its not running
      */
@@ -156,21 +186,94 @@ class PersonServiceTest extends Specification {
     @SuppressWarnings("GrUnresolvedAccess")
     def 'should return 200 code when used valid credentials' () {
         when: 'login with invalid credentials'
-            client.headers['Authorization'] = "Basic ${"$USERNAME:$PASSWORD".bytes.encodeBase64()}"
-            def response = client.get(path: "/api/v${version}/auth")
+            def response = client.post(
+                    path: "/api/v${version}/auth/login",
+                    body: [
+                        user : "admin",
+                        pass : "admin"
+                    ],
+                    requestContentType : ContentType.JSON
+            )
         
         then: 'server returns 200 code (ok)'
             assert response.status == 200 : 'response code should be 200 when tried to authenticate with valid credentials'
+
+        when: 'logout'
+            response = client.get(path: "/api/v${version}/auth/logout")
+
+        then : 'server returns 200 code (ok)'
+            assert response.status == 200 : 'response code should be 200 when logging out.'
+
     }
     
     def 'should return 401 (unauthorized) code when used invalid credentials' () {
         when: 'login with invalid credentials'
-            client.headers['Authorization'] = "Basic ${"$USERNAME:$INVALID_PASSWORD".bytes.encodeBase64()}"
-            client.get( path : '/basic-auth/user/pass' )
-        
+            def response = client.post(
+                    path: "/api/v${version}/auth/login",
+                    body: [
+                            user : user,
+                            pass : pass
+                    ],
+                    requestContentType : ContentType.JSON
+            )
+
         then: 'server returns 401 code (unauthorized)'
             HttpResponseException e = thrown(HttpResponseException)
             assert e.response.status == 401: 'response code should be 401 when you use wrong credentials'
+
+        where:
+            user      | pass
+            "admin"   | "incorrect_pass"
+            "nouser"  | "admin"
+            ""        | ""
+            "admin"   | ""
+            ""        | "admin"
+    }
+
+    def 'Trying to access restricted resources without logging in should return 403 as status'() {
+        when: 'Try to add a record'
+            client.post(
+                    path: "/api/v${version}/person",
+                    body : [
+                            "first_name"        : "Terry",
+                            "last_name"         : "Blower",
+                            "age"               : 10,
+                            "favourite_colour"  : "blue",
+                            "hobby"             : "none"
+                    ],
+                    requestContentType : ContentType.JSON
+            )
+
+        then: 'Expect 403 code'
+            HttpResponseException e = thrown(HttpResponseException)
+            assert e.response.status == 403: 'response must be: forbidden'
+
+        when: 'Try to update a record'
+            client.put(
+                    path : "/api/v${version}/person/1",
+                    body : [
+                            "first_name"        : "Pete",
+                            "last_name"         : "Jackson",
+                            "age"               : 20,
+                            "favourite_colour"  : "black",
+                            "hobby"             : ["none"]
+                    ],
+                    requestContentType : ContentType.JSON
+            )
+
+        then: 'Expect 403 code'
+            e = thrown(HttpResponseException)
+            assert e.response.status == 403: 'response must be: forbidden'
+
+        when: 'Try to delete a record'
+            client.delete(
+                    path : "/api/v${version}/person/1"
+            )
+
+        then: 'Expect 403 code'
+            e = thrown(HttpResponseException)
+            assert e.response.status == 403: 'response must be: forbidden'
+
     }
     
     /*
@@ -179,10 +282,15 @@ class PersonServiceTest extends Specification {
     @SuppressWarnings("GrUnresolvedAccess")
     @Unroll
     def 'It should be able to create a Person and it must return 200 as status' () {
+        setup: 'Login'
+            List<String> cookies = login()
+
         when: 'Add new record'
-            client.headers.Token = ""
             def response = client.post(
                     path: "/api/v${version}/person",
+                    headers : [
+                        "Cookie"  : cookies.join(";")
+                    ],
                     body : [
                         "first_name"        : first,
                         "last_name"         : last,
@@ -205,6 +313,9 @@ class PersonServiceTest extends Specification {
         then: "No exception"
             notThrown(Person.IllegalPersonException)
 
+        cleanup: 'Logout'
+            logout()
+
         where: 'Valid inputs'
             first    | last     | age | color    | hobby
             "Mega"   | "Stone"  | 29  | "yellow" | ["dancing"]
@@ -217,9 +328,11 @@ class PersonServiceTest extends Specification {
     @SuppressWarnings("GrUnresolvedAccess")
     @Unroll
     def 'Create a Person should fail with invalid data' () {
+        setup: 'Login'
+            login()
+
         when: "Prepare create information"
             int id = 1
-            client.headers.Token = ""
             def response = client.post(
                     path: "/api/v${version}/person",
                     body: [
@@ -236,6 +349,9 @@ class PersonServiceTest extends Specification {
             HttpResponseException e = thrown(HttpResponseException)
             assert e.response.status == 400: 'response code should be 400 if input is invalid'
 
+        cleanup: 'Logout'
+            logout()
+
         where: 'Invalid inputs'
             first | last     | age | color    | hobby
             ""    | "Martin" | 22  | "orange" | ["swimming"]              //Invalid First Name
@@ -251,9 +367,11 @@ class PersonServiceTest extends Specification {
     @SuppressWarnings("GrUnresolvedAccess")
     @Unroll
     def 'Update should be updated accordingly with valid data' () {
+        setup: 'Login'
+            login()
+
         when: "Prepare update information"
             int id = 1
-            client.headers.Token = ""
             def response = client.put(
                 path : "/api/v${version}/person/${id}",
                 body : [
@@ -271,6 +389,9 @@ class PersonServiceTest extends Specification {
             assert response.responseData.size() > 0 : 'response must have an object'
             assert response.data.ok == true : 'It must return OK = true'
 
+        cleanup: 'Logout'
+            logout()
+
         where: 'Valid inputs'
             first    | last     | age | color    | hobby
             "Albert" | "Wilson" | 78  | "black"  | ["meditation"]
@@ -283,9 +404,11 @@ class PersonServiceTest extends Specification {
     @SuppressWarnings("GrUnresolvedAccess")
     @Unroll
     def 'Update a Person should fail with invalid data' () {
+        setup: 'Login'
+            login()
+
         when: "Prepare update information"
             int id = 1
-            client.headers.Token = ""
             def response = client.put(
                     path : "/api/v${version}/person/${id}",
                     body : [
@@ -301,6 +424,9 @@ class PersonServiceTest extends Specification {
         then: 'server returns 400 code (Bad Request)'
             HttpResponseException e = thrown(HttpResponseException)
             assert e.response.status == 400 : 'response code should be 400 if input is invalid'
+
+        cleanup: 'Logout'
+            logout()
 
         where: 'Invalid inputs'
             first   | last      | age | color   | hobby
@@ -318,6 +444,7 @@ class PersonServiceTest extends Specification {
     @SuppressWarnings("GrUnresolvedAccess")
     def 'Delete a Person' () {
         setup: "Create a Person"
+            login()
             Person.initDB()
             Color colorObj = Color.fromString("red")
             String[] hobby = ["reading"]
@@ -325,10 +452,8 @@ class PersonServiceTest extends Specification {
             assert person.id
         
         when: "Delete person"
-            client.headers.Token = ""
             def response = client.delete(
-                    path : "/api/v${version}/person/${person.id}",
-                    requestContentType : ContentType.JSON
+                    path : "/api/v${version}/person/${person.id}"
             )
     
         then: 'server returns 200 code (ok) and response should be as expected'
@@ -341,19 +466,27 @@ class PersonServiceTest extends Specification {
             new Person(person.id)
         then:
             thrown Person.IllegalPersonException
+
+        cleanup: 'Logout'
+            logout()
     }
 
     @SuppressWarnings("GrUnresolvedAccess")
     def 'Delete a Person should fail with invalid id' () {
+        setup: 'Login'
+            login()
+
         when: "Delete person with invalid input"
             def response = client.delete(
-                    path : "/api/v${version}/person/${id}",
-                    requestContentType : ContentType.JSON
+                    path : "/api/v${version}/person/${id}"
             )
 
         then: 'server returns 400 code (Bad Request)'
             HttpResponseException e = thrown(HttpResponseException)
             assert e.response.status == 400 : 'response code should be 400 if input is invalid'
+
+        cleanup: 'Logout'
+            logout()
 
         where: 'Invalid inputs'
             id      | _

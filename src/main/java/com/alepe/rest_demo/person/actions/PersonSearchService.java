@@ -12,6 +12,7 @@ import java.util.Map;
 
 /**
  * Provides the service to search Person objects
+ * Access: Public
  * @since 2020/01/15.
  */
 public class PersonSearchService extends Service {

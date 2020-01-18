@@ -1,7 +1,8 @@
 package com.alepe.rest_demo;
 
+import com.alepe.rest_demo.auth.AuthService;
 import com.alepe.rest_demo.person.Person;
-import com.alepe.rest_demo.person.PersonService;
+import com.alepe.rest_demo.person.PersonAPI;
 import com.intellisrc.core.SysInfo;
 import com.intellisrc.core.SysService;
 import com.intellisrc.db.Database;
@@ -61,7 +62,8 @@ public class Main extends SysService {
          */
         ws.port = port;
         ws.setResources(SysInfo.getFile("resources"));
-        ws.addService(new PersonService());
+        ws.addService(new AuthService());
+        ws.addService(new PersonAPI());
         ws.onStart = (Service service) -> {
             running = true;
         };

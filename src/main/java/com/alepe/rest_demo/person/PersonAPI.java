@@ -32,7 +32,7 @@ import java.util.List;
  *
  * @since 2020/01/15.
  */
-public class PersonService implements ServiciableMultiple {
+public class PersonAPI implements ServiciableMultiple {
     public static final int version = 1;
 
     @Override

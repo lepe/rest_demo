@@ -11,11 +11,12 @@ import java.util.Map;
 
 /**
  * Provides the service to retrieve Person objects
+ * Access: Public
  * @since 2020/01/15.
  */
 public class PersonGetService extends Service {
     public PersonGetService(String path) {
-        setPath(path);
+         setPath(path);
          setAction((ActionRequestResponse) (Request request, Response response) -> {
             Map<String, Object> result = new HashMap<>();
             int id = 0;

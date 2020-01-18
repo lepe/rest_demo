@@ -1,5 +1,6 @@
 package com.alepe.rest_demo.person.actions;
 
+import com.alepe.rest_demo.auth.AuthService;
 import com.alepe.rest_demo.person.Person;
 import com.intellisrc.core.Log;
 import com.intellisrc.web.JSON;
@@ -12,6 +13,7 @@ import java.util.Map;
 
 /**
  * Provides the service to create Person objects
+ * Access: Private
  * @since 2020/01/15.
  */
 public class PersonCreateService extends Service {
@@ -19,6 +21,7 @@ public class PersonCreateService extends Service {
         // Create Person service:
         setMethod(Service.Method.POST);
         setPath(path);
+        setAllow(AuthService.allowAdmin()); //Only authorized users can perform this action
         setAction((ActionRequestResponse) (Request request, Response response) -> {
             int id = 0;
             boolean ok = false;

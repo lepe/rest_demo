@@ -19,7 +19,7 @@ import java.util.*;
  * @author A.Lepe
  */
 public class Person {
-    private static String table = "person";
+    private static final String personTable = "person";
 
     protected int id;
     protected String firstName;
@@ -60,7 +60,7 @@ public class Person {
         row.put("age", age);
         row.put("favourite_colour", favouriteColor.toString());
         row.put("hobby", String.join(",", hobby));
-        boolean inserted = db.table(table).insert(row);
+        boolean inserted = db.table(personTable).insert(row);
         id = db.getLastID();
         db.close();
 
@@ -84,7 +84,7 @@ public class Person {
         }
 
         DB db = Database.connect();
-        Data row = db.table(table).key("id").get(id);
+        Data row = db.table(personTable).key("id").get(id);
         db.close();
 
         if(row == null || row.isEmpty()) {
@@ -123,7 +123,7 @@ public class Person {
         boolean ok = false;
         if(isValid() &&! newFirstName.isEmpty() &&! newLastName.isEmpty()) {
             DB db = Database.connect();
-            ok = db.table(table).key("id").update(Map.of("first_name", newFirstName, "last_name", newLastName), id);
+            ok = db.table(personTable).key("id").update(Map.of("first_name", newFirstName, "last_name", newLastName), id);
             if(ok) {
                 firstName = newFirstName;
                 lastName = newLastName;
@@ -143,7 +143,7 @@ public class Person {
         boolean ok = false;
         if(isValid() && newAge > 0) {
             DB db = Database.connect();
-            ok = db.table(table).key("id").update(Map.of("age", newAge), id);
+            ok = db.table(personTable).key("id").update(Map.of("age", newAge), id);
             if(ok) {
                 age = newAge;
             }
@@ -162,7 +162,7 @@ public class Person {
         boolean ok = false;
         if(isValid()) {
             DB db = Database.connect();
-            ok = db.table(table).key("id").update(Map.of("favourite_colour", color.toString()), id);
+            ok = db.table(personTable).key("id").update(Map.of("favourite_colour", color.toString()), id);
             db.close();
             if(ok) {
                 favouriteColor = color;
@@ -182,7 +182,7 @@ public class Person {
         if(isValid()) {
             DB db = Database.connect();
             String newHobbiesStr = String.join(",", hobbies);
-            ok = db.table(table).key("id").update(Map.of("hobby", newHobbiesStr), id);
+            ok = db.table(personTable).key("id").update(Map.of("hobby", newHobbiesStr), id);
             db.close();
             if(ok) {
                 hobby = hobbies;
@@ -200,7 +200,7 @@ public class Person {
         boolean ok = false;
         if(isValid()) {
             DB db = Database.connect();
-            ok = db.table(table).key("id").delete(id);
+            ok = db.table(personTable).key("id").delete(id);
             db.close();
             Log.i("Person with id: %d was deleted.", id);
             id = 0; //clear this Person
@@ -246,7 +246,7 @@ public class Person {
      * @return Person (with new ID)
      * @throws IllegalPersonException : Unable to clone Person : if it was illegal after all.
      */
-    static public Person clone(Person person) throws IllegalPersonException {
+    static public Person clone(final Person person) throws IllegalPersonException {
         Person clone = new Person(person.firstName, person.lastName, person.age, person.favouriteColor, person.hobby);
         Log.i("Clone process succeed. New id is: %d", clone.id);
         return clone;
@@ -257,7 +257,7 @@ public class Person {
      * @return a Person object
      * @throws IllegalPersonException : Unable to import person from Map
      */
-    static public Person fromMap(Map<?,?> map) throws IllegalPersonException {
+    static public Person fromMap(final Map<?,?> map) throws IllegalPersonException {
         Person person = new Person();
         HashMap<String, Object> personMap = cleanInputMap(map);
         person.id = (Integer) personMap.get("id");
@@ -275,7 +275,7 @@ public class Person {
      * @param input : Map (from JSON or Data)
      * @return a clean Map
      */
-    public static HashMap<String, Object> cleanInputMap(Map<?, ?> input) throws IllegalPersonException {
+    public static HashMap<String, Object> cleanInputMap(final Map<?, ?> input) throws IllegalPersonException {
         HashMap<String, Object> cleanMap = new HashMap<>();
         boolean ok = true;
         for (var inKey : input.keySet()) {
@@ -356,7 +356,7 @@ public class Person {
      * @param rows : Database object containing the records
      * @return a list of Person objects
      */
-    static private List<Person> fromData(Data rows) {
+    static private List<Person> fromData(final Data rows) {
         List<Person> list = new ArrayList<>();
         if(rows != null) {
             var data = rows.toListMap();
@@ -381,7 +381,7 @@ public class Person {
         if(!search.isEmpty()) {
             Log.i("Searching for: %s", search);
             search = "%" + search + "%";
-            Data rows = db.table(table).where("lower(`first_name`) LIKE ? or lower(`last_name`) LIKE ?", search, search).get();
+            Data rows = db.table(personTable).where("lower(`first_name`) LIKE ? or lower(`last_name`) LIKE ?", search, search).get();
             result = fromData(rows);
             db.close();
         }
@@ -396,7 +396,7 @@ public class Person {
      */
     static public List<Person> getAll(int offset, int qty) {
         DB db = Database.connect();
-        Data rows = db.table(table).limit(qty, offset).get();
+        Data rows = db.table(personTable).limit(qty, offset).get();
         db.close();
         return fromData(rows);
     }
