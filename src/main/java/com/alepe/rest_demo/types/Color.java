@@ -6,7 +6,7 @@ package com.alepe.rest_demo.types;
  */
 @SuppressWarnings("unused")
 public enum Color {
-    NONE, RED, BLUE, GREEN, YELLOW, ORANGE, PINK, BROWN, WHITE, BLACK;
+    NONE, RED, BLUE, GREEN, YELLOW, ORANGE, PURPLE, PINK, BROWN, WHITE, BLACK;
 
     /**
      * Gets Color from String.

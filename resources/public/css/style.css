@@ -1,61 +1,26 @@
-@keyframes fadein {
-  0% {
-    opacity: 0; }
-  100% {
-    opacity: 1; } }
-@keyframes fadeout {
-  0% {
-    opacity: 1; }
-  100% {
-    opacity: 0; } }
-textarea, input {
+input {
   border: 0;
   border-radius: 2px;
   padding: 5px 10px;
   box-shadow: 0 1px 2px #0009 inset; }
 
-button, .button {
+button {
   min-width: 100px;
   padding: 5px 20px;
-  background-color: #333;
+  background-color: #71AC69;
   border: 0;
   border-radius: 4px;
   cursor: pointer;
   color: white;
   display: inline-block; }
-  button:hover, .button:hover {
+  button:hover {
     background-color: #666; }
-  button.red, .button.red {
-    background-color: #f44336; }
-    button.red:hover, .button.red:hover {
-      background-color: #f44336cc; }
-  button.green, .button.green {
-    background-color: #4caf50; }
-    button.green:hover, .button.green:hover {
-      background-color: #4caf50cc; }
-  button.blue, .button.blue {
-    background-color: #2196f3; }
-    button.blue:hover, .button.blue:hover {
-      background-color: #2196f3cc; }
 
 .hidden {
   display: none; }
 
 h1, h2, h3 {
   margin: 0; }
-
-h2, h2 * {
-  padding: 20px 5px;
-  font-size: 25px;
-  /* 120% */ }
-
-h3 {
-  padding: 10px 0 5px 0;
-  border-bottom: 1px solid #CCC;
-  margin-bottom: 5px; }
-
-.fa {
-  margin-right: 15px; }
 
 a, a:visited {
   color: #2970ce;
@@ -69,30 +34,19 @@ a, a:visited {
   a.red, a:visited.red {
     color: #33393B; }
 
-select {
-  padding: 10px;
-  font-size: 120%;
-  width: 100%;
-  border: 1px solid #CCC;
-  background: white; }
-  select option {
-    padding: 10px;
-    font-size: 120%; }
-
-.inblock {
-  display: inline-block !important; }
-
 html {
   background: white; }
   html * {
     box-sizing: border-box;
-    font-family: verdana, sans-serif;
+    font-family: 'Poppins', 'Verdana', sans-serif;
     font-size: 16px; }
   html body {
     margin: 0;
     padding: 0;
     display: grid;
-    grid-template-areas: "header header header header" "main main main side" "footer footer footer footer";
+    grid-template-columns: auto 500px;
+    grid-template-rows: auto;
+    grid-template-areas: "header header" "main side" "footer footer";
     grid-gap: 0; }
     html body header {
       grid-area: header;
@@ -100,23 +54,39 @@ html {
       color: white;
       height: 50px; }
       html body header h1 {
-        margin: 12px;
+        margin: 0px;
+        padding: 8px;
         font-size: 20px; }
+        html body header h1 img {
+          vertical-align: bottom; }
     html body article {
       grid-area: main;
       height: calc(100vh - 100px);
       background: #EEE; }
       html body article h2 {
+        display: grid;
+        grid-template-columns: auto 50px 50px;
+        grid-template-areas: "nameh ageh colorh";
+        grid-gap: 0;
         margin: 20px 20px 0 20px;
         background: #33393B;
         color: white;
-        padding: 10px 10px 10px 20px;
-        height: 40px; }
+        padding: 10px 20px;
+        height: 40px;
+        border-bottom: 2px solid #71AC69; }
+        html body article h2 .name {
+          grid-area: nameh; }
+        html body article h2 .age {
+          grid-area: ageh;
+          text-align: center; }
+        html body article h2 .color {
+          grid-area: colorh;
+          text-align: center; }
       html body article #table {
         background: white;
         margin: 0 20px 20px 20px;
         padding: 10px;
-        height: calc(100vh - 180px);
+        height: calc(100vh - 182px);
         overflow-x: hidden;
         overflow-y: auto; }
         html body article #table ul {
@@ -125,13 +95,48 @@ html {
           html body article #table ul li:nth-child(even) {
             background-color: #f2f2f2; }
           html body article #table ul li {
+            display: grid;
+            grid-template-columns: 80px auto 50px 50px;
+            grid-template-areas: "photo name age color";
+            grid-gap: 0;
             list-style: none;
             padding: 10px; }
+            html body article #table ul li span {
+              vertical-align: middle;
+              line-height: 70px;
+              font-size: 200%; }
+            html body article #table ul li .photo {
+              grid-area: photo;
+              border: 1px solid #CCC;
+              width: 70px;
+              height: 70px;
+              text-align: center;
+              vertical-align: middle; }
+              html body article #table ul li .photo img {
+                margin: 2px; }
+            html body article #table ul li .name {
+              grid-area: name; }
+            html body article #table ul li .age {
+              grid-area: age;
+              font-size: 200%;
+              line-height: 70px;
+              text-align: center; }
+            html body article #table ul li .color {
+              grid-area: color;
+              text-align: center; }
+              html body article #table ul li .color b {
+                width: 32px;
+                height: 32px;
+                background: white;
+                display: inline-block;
+                vertical-align: middle;
+                border: 1px solid white;
+                outline: 1px solid #CCC; }
     html body aside {
       grid-area: side; }
       html body aside #photo {
-        width: 200px;
-        height: 200px;
+        width: 212px;
+        height: 212px;
         margin: 20px auto;
         display: block;
         border: 4px solid #33393B;
@@ -153,6 +158,16 @@ html {
     html body footer {
       grid-area: footer;
       height: 50px;
-      background: #33393B; }
+      background: #33393B;
+      line-height: 40px;
+      padding: 5px 20px;
+      color: white; }
+      html body footer .by a {
+        color: #71AC69 !important; }
+      html body footer #social {
+        float: right; }
+      html body footer a {
+        color: white !important;
+        padding: 0 5px; }
 
 /*# sourceMappingURL=style.css.map */

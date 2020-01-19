@@ -111,15 +111,15 @@ In case no data was found, it will respond with HTTP status 204.
 In case of mistaken input, the server will respond with HTTP status 400.
 
 ## Technology used:
-* Java 8+
+* Java 11
+	* [Spark Framework](http://sparkjava.com/)
+	* [GSON](https://github.com/google/gson)
+	* [JLine](https://jline.github.io/)
 * Groovy 2.5.6
-	* Spock Unit Test Framework
+    * [Intellisrc library](https://gitlab.com/intellisrc/common)    (developed by me)
+	* [Spock Unit Test Framework](http://spockframework.org/)
 * Gradle
-* intellisrc library
-	* Spark Framework
-	* GSON
-	* Terminal //TODO
-* M2D2
+* [M2D2](https://github.com/lepe/m2d2)  (JS framework developed by me)
 * SQLite
 
 ## Developing environment:
@@ -132,7 +132,7 @@ In case of mistaken input, the server will respond with HTTP status 400.
 * Gradle
 * rsync
 
-### Preparing environment:
+### Development environment:
 * Clone this repository: `git clone https://.....`
 * Install SDK:
 * Install Groovy and Gradle:
@@ -168,9 +168,14 @@ required files to execute the services.
 * Java 11 JRE
 * Modern Browser (IE and Edge may not be supported)
 
+  Note: Tested in:
+    - Linux with Chrome, Chromium, Vivaldi, Firefox and Opera.
+    - Android with default browser (Chrome for Mobile)
+
 ### How to run:
 * Execute: `./run`
-This script will launch the service and will listen on port 7777.
+
+  This script will launch the service and will listen on port 7777.
 You can also execute: `./run stop` to stop the service or
 `./run restart` to restart it.
 
@@ -181,9 +186,16 @@ To see the logs you can use `lnav` (recommended), `tail -f` or `less -r`.
 * The database can be explored using the service console:
 `./run console`
 
-It will launch an interactive console. The available commands can be displayed
+  It will launch an interactive console. The available commands can be displayed
 typing: `help`. To display all records, for example, type: `list`.
 
 ## Limitations:
 
 * The API doesn't support multiple user levels.
+* For simplicity, the API is using session based authorization, for a public API, using API Keys or OAuth is recommended.
+* UI may not display correctly in Windows and iOS (untested).
+
+## Credits:
+
+* Profile images from: [This Person Doesn't Exists](https://www.thispersondoesnotexist.com/)
+* 'Poppins' font from: [Google Fonts](https://fonts.google.com/specimen/Poppins)

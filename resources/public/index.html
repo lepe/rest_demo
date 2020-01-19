@@ -14,54 +14,57 @@
     <link rel="icon" href="/img/logo-64.png"   type='image/png'    sizes="64x64">
     <link rel="icon" href="/img/logo-128.png"  type='image/png'    sizes="128x128">
 
-    <link rel="stylesheet" href="/css/style.css?VERSION"        type="text/css" />
-
-    <script src="/js/m2d2.min.js?VERSION"               type="text/javascript"></script>
-    <script src="/js/m2d2.style.src.js?VERSION"         type="text/javascript"></script>
-    <script src="/js/m2d2.show.src.js?VERSION"          type="text/javascript"></script>
-    <script src="/js/main.js?VERSION"                   type="text/javascript"></script>
+    <link href="https://fonts.googleapis.com/css?family=Poppins&display=swap" rel="stylesheet" type="text/css"/>
+    <link href="/css/style.css?VERSION" rel="stylesheet" type="text/css" />
+    <link href="/css/font-awesome.css?VERSION" rel="stylesheet" type="text/css" />
 </head>
 <body>
-    <header><h1>REST DEMO v.1</h1></header>
+    <header><h1><img src="/img/logo-32.png" alt="Rest Demo logo" width="32" height="32"> REST DEMO v.1</h1></header>
     <article>
-        <h2>People</h2>
+        <h2>
+            <span class="name">Full Name</span>
+            <span class="age">Age</span>
+            <span class="color" title="Favourite Colour">FC</span>
+        </h2>
         <section id="table">
             <ul>
-                <li>Aaa</li>
-                <li>Aaa</li>
-                <li>Aaa</li>
-                <li>Aaa</li>
-                <li>Aaa</li>
-                <li>Aaa</li>
-                <li>Aaa</li>
-                <li>Aaa</li>
-                <li>Aaa</li>
-                <li>Aaa</li>
-                <li>Aaa</li>
-                <li>Aaa</li>
-                <li>Aaa</li>
-                <li>Aaa</li>
-                <li>Aaa</li>
-                <li>Aaa</li>
-                <li>Aaa</li>
-                <li>Aaa</li>
+                <li>
+                    <span class="photo"><img src="/img/profiles/1.jpg" width="64" height="64" alt="Name" /></span>
+                    <span class="name">Name Here</span>
+                    <span class="age">44</span>
+                    <span class="color"><b></b></span>
+                </li>
                 <li>Aaa</li>
             </ul>
         </section>
     </article>
     <aside>
         <section id="photo">
-            <!--img src="https://robohash.org/set_set5/bgset_bg1/1.png?size=200x200" width="50" /-->
-            <img src="https://www.thispersondoesnotexist.com/image" width="100%" />
+            <img src="/img/profiles/1.jpg" width="200" height="200" alt="Name" />
         </section>
         <section id="profile">
             <div><label>Name</label><span>Test</span></div>
             <div><label>Age</label><span></span></div>
             <div><label>Favourite Colour</label><span></span></div>
-            <div><label>Hobbies</label><span></span></div>A
+            <div><label>Hobbies</label><span>Hobbies</span></div>
             <!-- button>Save</button> -->
         </section>
     </aside>
-    <footer></footer>
+    <footer>
+        <span class="by">Rest Demo by <a href="http://alepe.com">Alberto Lepe</a></span>
+        <span id="social">
+            <a class="fa fa-stack-overflow" href="http://stack.alepe.com" target="_blank"></a>
+            <a class="fa fa-github" href="http://github.com/lepe" target="_blank"></a>
+            <a class="fa fa-gitlab" href="http://gitlab.com/lepe" target="_blank"></a>
+            <a class="fa fa-facebook-square" href="http://fb.me/lepe.jp" target="_blank"></a>
+            <a class="fa fa-linkedin" href="https://linkedin.com/in/lepe" target="_blank"></a>
+        </span>
+    </footer>
+    <!-- ------------------------- scripts ----------------------------- -->
+    <script src="/js/m2d2.min.js?VERSION"               type="text/javascript"></script>
+    <script src="/js/m2d2.style.src.js?VERSION"         type="text/javascript"></script>
+    <script src="/js/m2d2.show.src.js?VERSION"          type="text/javascript"></script>
+    <script src="/js/hobbies.js?VERSION"                type="text/javascript"></script>
+    <script src="/js/main.js?VERSION"                   type="text/javascript"></script>
 </body>
 </html>
