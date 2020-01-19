@@ -14,6 +14,9 @@ button {
     &.red {
         background-color: $red_color;
     }
+    &.blue {
+        background-color: $blue_color;
+    }
 }
 .hidden {
     display: none;

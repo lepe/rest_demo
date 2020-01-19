@@ -41,6 +41,8 @@ button {
     background-color: #666; }
   button.red {
     background-color: #C23825; }
+  button.blue {
+    background-color: #227FBB; }
 
 .hidden {
   display: none; }
@@ -183,8 +185,16 @@ html {
           border: 1px solid #33393B;
           padding: 9px;
           cursor: inherit !important; }
+        html body aside #profile form.edit select {
+          -webkit-appearance: menulist;
+          -moz-appearance: menulist;
+          appearance: menulist; }
         html body aside #profile form.edit #actions {
           display: block; }
+        html body aside #profile form.edit .hobbies li {
+          cursor: pointer; }
+          html body aside #profile form.edit .hobbies li:hover {
+            background-color: #f2f2f2; }
         html body aside #profile form > div {
           margin: 10px;
           background: #EEE; }
@@ -195,7 +205,15 @@ html {
             color: white;
             width: 40%; }
           html body aside #profile form > div input {
-            width: 276px;
+            width: 276px; }
+          html body aside #profile form > div select {
+            padding: 10px;
+            margin: -10px 0;
+            width: 205px;
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            appearance: none; }
+          html body aside #profile form > div input, html body aside #profile form > div select {
             border: 0;
             background: transparent;
             cursor: default; }
@@ -212,12 +230,24 @@ html {
             margin: -5px 5px; }
           html body aside #profile form > div .colour i {
             margin-left: 5px; }
+          html body aside #profile form > div .hobbies {
+            margin: 0;
+            padding: 10px;
+            min-height: 60px; }
+            html body aside #profile form > div .hobbies li {
+              list-style: none;
+              border: 1px solid #CCC;
+              padding: 5px;
+              display: inline-block;
+              background: white;
+              margin: 2px; }
         html body aside #profile form #actions {
           display: none;
           background: white !important;
-          padding: 10px 40px; }
-          html body aside #profile form #actions .save {
-            float: right; }
+          padding: 10px 40px;
+          text-align: center; }
+          html body aside #profile form #actions button {
+            margin: 0 10px; }
     html body footer {
       grid-area: footer;
       height: 50px;

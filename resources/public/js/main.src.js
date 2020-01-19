@@ -10,6 +10,18 @@ document.addEventListener("DOMContentLoaded", function() {
         return "/img/profiles/" + id + ".jpg";
     }
     /**
+     * It will create a Hobby element
+     */
+    function addHobby(text) {
+        profile.hobbies.items.push({
+           text : text,
+           onclick : function(e) {
+               var index = Array.prototype.indexOf.call(this.parentNode.childNodes, this);
+               profile.hobbies.items.splice(index - 1, 1);
+           }
+        });
+    }
+    /**
      * Update the profile view
      */
     function updateProfile(id) {
@@ -20,12 +32,13 @@ document.addEventListener("DOMContentLoaded", function() {
                 profile.name.value = person.first_name + " " + person.last_name;
                 profile.age.value = person.age;
                 profile.colour.div.css = person.favourite_colour;
-                profile.colour.i = person.favourite_colour;
+                profile.colour.favourite = person.favourite_colour;
                 profile.hobbies.items.length = 0;
                 for(var h in person.hobby) {
-                    profile.hobbies.items.push(person.hobby[h]);
+                    addHobby(person.hobby[h]);
                 }
                 editId = person.id;
+                actions.disabled = false;
             });
         } else {
             photo.img.src = getProfilePhoto(id);
@@ -106,7 +119,9 @@ document.addEventListener("DOMContentLoaded", function() {
                 });
             }
             callback(people);
-            updateProfile(first);
+            if(! editId) {
+                updateProfile(first);
+            }
         }, function() {
             ng("There was a problem while connecting to service.");
         });
@@ -126,15 +141,32 @@ document.addEventListener("DOMContentLoaded", function() {
             css : "",
             onsubmit : function(e) {
                 var elems = this.elements;
+                var hobbyList = [];
+                for(var i in profile.hobbies.items) {
+                    hobbyList.push(profile.hobbies.items[i].text);
+                }
                 var data = {
-                    first_name : elems.name.value.split(" ")[0],
-                    last_name : elems.name.value.split(" ")[1],
-                    age : elems.age.value
+                    first_name  : elems.name.value.split(" ")[0],
+                    last_name   : elems.name.value.split(" ")[1],
+                    age         : elems.age.value,
+                    favourite_colour : elems.favourite.value,
+                    hobby       : hobbyList
                 }
                 if(editId) {
                     $put(apiUrl + "/person/"+editId, data, function(res) {
                         ok("Saved successfully!");
                         table.m2d2.update();
+                    }, function() {
+                        ng("Error while saving data.");
+                    });
+                } else {
+                    $post(apiUrl + "/person", data, function(res) {
+                        if(res.ok) {
+                            editId = res.id;
+                            updateProfile(editId);
+                            ok("Saved successfully!");
+                            table.m2d2.update();
+                        }
                     }, function() {
                         ng("Error while saving data.");
                     });
@@ -159,11 +191,23 @@ document.addEventListener("DOMContentLoaded", function() {
             div : {
                 css : ""
             },
-            i : ""
+            favourite : {
+                value : "",
+                onchange : function() {
+                    profile.colour.div.css = this.value;
+                },
+                onmousedown : function() {
+                    return profile.form.css == "edit";
+                }
+            }
         },
         hobby : {
             value : "",
-            readOnly : true
+            readOnly : true,
+            onchange : function() {
+                addHobby(this.value);
+                this.value = "";
+            }
         },
         hobbies : {
             template: "li",
@@ -173,6 +217,7 @@ document.addEventListener("DOMContentLoaded", function() {
 
     var actions = m2d2("#actions", {
         rm : {
+            disabled : false,
             onclick : function() {
                 yn("delete", function() {
                     if(editId) {
@@ -182,6 +227,13 @@ document.addEventListener("DOMContentLoaded", function() {
                         });
                     }
                 });
+                return false;
+            }
+        },
+        'new' : {
+            onclick: function() {
+                actions.disabled = true;
+                updateProfile(0);
                 return false;
             }
         }
