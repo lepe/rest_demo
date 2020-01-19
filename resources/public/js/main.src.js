@@ -23,7 +23,8 @@ document.addEventListener("DOMContentLoaded", function() {
                             photo.img.src = getProfilePhoto(id);
                             profile.name = person.first_name + " " + person.last_name;
                             profile.age = person.age;
-                            profile.colour = person.favourite_colour;
+                            profile.colour.div.css = person.favourite_colour;
+                            profile.colour.i = person.favourite_colour;
                             profile.hobbies.items.length = 0;
                             for(var h in person.hobby) {
                                 profile.hobbies.items.push(person.hobby[h]);
@@ -40,7 +41,7 @@ document.addEventListener("DOMContentLoaded", function() {
                     age   : person.age,
                     colour : {
                         div : {
-                            bgcolor : person.favourite_colour
+                            css : person.favourite_colour
                         }
                     }
                 });
@@ -61,7 +62,12 @@ document.addEventListener("DOMContentLoaded", function() {
     var profile = m2d2("#profile", {
         name : "",
         age  : "",
-        colour : "",
+        colour : {
+            div : {
+                css : ""
+            },
+            i : ""
+        },
         hobbies : {
             template: "<li>",
             items : []

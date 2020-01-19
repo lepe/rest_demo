@@ -11,7 +11,7 @@ CREATE INDEX bylast ON person(`last_name`);
 INSERT INTO `person` (`first_name`,`last_name`,`age`,`favourite_colour`,`hobby`) VALUES("Sarah", "Harrison", 28, "red", "reading,computer");
 INSERT INTO `person` (`first_name`,`last_name`,`age`,`favourite_colour`,`hobby`) VALUES("John", "Grove", 35, "blue", "fishing,jogging,movies");
 INSERT INTO `person` (`first_name`,`last_name`,`age`,`favourite_colour`,`hobby`) VALUES("Retta", "Ausherman", 45, "orange", "gardening,walking");
-INSERT INTO `person` (`first_name`,`last_name`,`age`,`favourite_colour`,`hobby`) VALUES("Mina", "Churchwell", 22, "none", "listening to music,exercise");
+INSERT INTO `person` (`first_name`,`last_name`,`age`,`favourite_colour`,`hobby`) VALUES("Mina", "Churchwell", 22, "purple", "listening to music,exercise");
 INSERT INTO `person` (`first_name`,`last_name`,`age`,`favourite_colour`,`hobby`) VALUES("Kala", "Gilliland", 29, "white", "team sports,reading");
 INSERT INTO `person` (`first_name`,`last_name`,`age`,`favourite_colour`,`hobby`) VALUES("Tamie", "Grace", 24, "yellow", "shopping");
 INSERT INTO `person` (`first_name`,`last_name`,`age`,`favourite_colour`,`hobby`) VALUES("Tom", "Hiller", 31, "blue", "socializing,sewing");

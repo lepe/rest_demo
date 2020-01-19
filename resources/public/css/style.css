@@ -1,3 +1,33 @@
+div.white {
+  background-color: white; }
+
+div.black {
+  background-color: black; }
+
+div.red {
+  background-color: #C23825; }
+
+div.blue {
+  background-color: #227FBB; }
+
+div.green {
+  background-color: #19AF5D; }
+
+div.yellow {
+  background-color: #F3C501; }
+
+div.orange {
+  background-color: #D55400; }
+
+div.purple {
+  background-color: #8F40AF; }
+
+div.pink {
+  background-color: #DA549F; }
+
+div.brown {
+  background-color: #AF5740; }
+
 input {
   border: 0;
   border-radius: 2px;
@@ -127,7 +157,6 @@ html {
               html body article #table ul li .colour div {
                 width: 32px;
                 height: 32px;
-                background: white;
                 display: inline-block;
                 vertical-align: middle;
                 border: 1px solid white;
@@ -145,18 +174,28 @@ html {
         padding: 2px; }
       html body aside #profile {
         margin: 10px; }
-        html body aside #profile div {
+        html body aside #profile > div {
           margin: 10px;
           background: #EEE; }
-          html body aside #profile div label {
+          html body aside #profile > div label {
             padding: 10px;
             display: inline-block;
             background: #33393B;
             color: white;
             width: 40%; }
-          html body aside #profile div span {
+          html body aside #profile > div span {
             padding: 10px;
             display: inline-block; }
+          html body aside #profile > div .colour div {
+            width: 32px;
+            height: 32px;
+            display: inline-block;
+            vertical-align: middle;
+            border: 1px solid white;
+            outline: 1px solid #CCC;
+            margin: -5px 5px; }
+          html body aside #profile > div .colour i {
+            margin-left: 5px; }
     html body footer {
       grid-area: footer;
       height: 50px;
