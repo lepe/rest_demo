@@ -1,0 +1,52 @@
+ /*
+   ##Device = Desktops
+   ##Screen = 1281px to higher resolution desktops
+ */
+ @media (min-width: 1281px) {
+ }
+
+ /*
+   ##Device = Tablets, Ipads (portrait)
+ */
+ @media (min-width: 768px) and (max-width: 1024px) {
+ }
+
+ /*
+   ##Device = Tablets, Ipads (landscape)
+ */
+ @media (min-width: 851px) and (max-width: 1024px) and (orientation: landscape) {
+ }
+
+ /*
+   ##Small screen (General)
+ */
+ @media (max-width: 1090px) {
+    body {
+        grid-template-areas: "header" "main" "footer" !important;
+        grid-template-columns: auto !important;
+    }
+    aside {
+        position: fixed;
+        top     : 0;
+        left    : 0;
+        right   : 0;
+        bottom  : 0;
+        background: white;
+        display :none;
+    }
+ }
+
+ /*
+   ##Device = Low Resolution Tablets, Mobiles
+ */
+ @media (max-width: 850px) {
+    #table ul li span {
+        font-size: 125% !important;
+    }
+ }
+
+ /*
+   ##Device = Most of the Smartphones Mobiles (Portrait)
+ */
+ @media (max-width: 480px) {
+ }

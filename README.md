@@ -119,7 +119,9 @@ In case of mistaken input, the server will respond with HTTP status 400.
     * [Intellisrc library](https://gitlab.com/intellisrc/common)    (developed by me)
 	* [Spock Unit Test Framework](http://spockframework.org/)
 * Gradle
-* [M2D2](https://github.com/lepe/m2d2)  (JS framework developed by me)
+* Javascript
+    * [M2D2](https://github.com/lepe/m2d2)  (Framework developed by me)
+    * [Notie](https://github.com/jaredreich/notie)
 * SQLite
 
 ## Developing environment:

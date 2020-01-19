@@ -86,7 +86,7 @@ html {
         html body header h1 img {
           vertical-align: bottom; }
       html body header button {
-        position: absolute;
+        position: fixed;
         top: 5px;
         right: 10px; }
         html body header button::before {
@@ -138,7 +138,8 @@ html {
             html body article #table ul li span {
               vertical-align: middle;
               line-height: 70px;
-              font-size: 200%; }
+              font-size: 200%;
+              white-space: nowrap; }
             html body article #table ul li .photo {
               grid-area: photo;
               border: 1px solid #CCC;
@@ -180,7 +181,8 @@ html {
         margin: 10px; }
         html body aside #profile.edit input {
           border: 1px solid #33393B;
-          padding: 9px; }
+          padding: 9px;
+          cursor: inherit !important; }
         html body aside #profile.edit .buttons {
           display: block; }
         html body aside #profile form > div {
@@ -195,7 +197,8 @@ html {
           html body aside #profile form > div input {
             width: 276px;
             border: 0;
-            background: transparent; }
+            background: transparent;
+            cursor: default; }
           html body aside #profile form > div input, html body aside #profile form > div span {
             padding: 10px;
             display: inline-block; }
@@ -209,8 +212,12 @@ html {
             margin: -5px 5px; }
           html body aside #profile form > div .colour i {
             margin-left: 5px; }
-          html body aside #profile form > div .buttons {
-            display: none; }
+        html body aside #profile form .buttons {
+          display: none;
+          background: white !important;
+          padding: 10px 40px; }
+          html body aside #profile form .buttons .save {
+            float: right; }
     html body footer {
       grid-area: footer;
       height: 50px;
@@ -225,5 +232,41 @@ html {
       html body footer a {
         color: white !important;
         padding: 0 5px; }
+
+/*
+  ##Device = Desktops
+  ##Screen = 1281px to higher resolution desktops
+*/
+/*
+  ##Device = Tablets, Ipads (portrait)
+*/
+/*
+  ##Device = Tablets, Ipads (landscape)
+*/
+/*
+  ##Small screen (General)
+*/
+@media (max-width: 1090px) {
+  body {
+    grid-template-areas: "header" "main" "footer" !important;
+    grid-template-columns: auto !important; }
+
+  aside {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: white;
+    display: none; } }
+/*
+  ##Device = Low Resolution Tablets, Mobiles
+*/
+@media (max-width: 850px) {
+  #table ul li span {
+    font-size: 125% !important; } }
+/*
+  ##Device = Most of the Smartphones Mobiles (Portrait)
+*/
 
 /*# sourceMappingURL=style.css.map */

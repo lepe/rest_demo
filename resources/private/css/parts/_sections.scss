@@ -28,7 +28,7 @@ html {
                 }
             }
             button {
-                position: absolute;
+                position: fixed;
                 top: 5px;
                 right: 10px;
                 &::before {
@@ -90,6 +90,7 @@ html {
                             vertical-align: middle;
                             line-height: 70px;
                             font-size: 200%;
+                            white-space: nowrap;
                         }
                         .photo {
                             grid-area: photo;
@@ -146,6 +147,7 @@ html {
                     input {
                         border: 1px solid $main_color;
                         padding: 9px;
+                        cursor: inherit !important;
                     }
                     .buttons {
                         display: block;
@@ -166,6 +168,7 @@ html {
                             width: 276px;
                             border: 0;
                             background: transparent;
+                            cursor: default;
                         }
                         input, span {
                             padding: 10px;
@@ -185,8 +188,13 @@ html {
                                 margin-left: 5px;
                             }
                         }
-                        .buttons {
-                            display: none;
+                    }
+                    .buttons {
+                        display: none;
+                        background: white !important;
+                        padding: 10px 40px;
+                        .save {
+                            float: right;
                         }
                     }
                 }
