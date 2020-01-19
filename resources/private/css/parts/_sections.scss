@@ -143,17 +143,17 @@ html {
             }
             #profile {
                 margin: 10px;
-                &.edit {
-                    input {
-                        border: 1px solid $main_color;
-                        padding: 9px;
-                        cursor: inherit !important;
-                    }
-                    .buttons {
-                        display: block;
-                    }
-                }
                 form {
+                    &.edit {
+                        input {
+                            border: 1px solid $main_color;
+                            padding: 9px;
+                            cursor: inherit !important;
+                        }
+                        #actions {
+                            display: block;
+                        }
+                    }
                     > div {
                         margin: 10px;
                         background: $sub_color;
@@ -189,7 +189,7 @@ html {
                             }
                         }
                     }
-                    .buttons {
+                    #actions {
                         display: none;
                         background: white !important;
                         padding: 10px 40px;

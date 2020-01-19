@@ -179,11 +179,11 @@ html {
         padding: 2px; }
       html body aside #profile {
         margin: 10px; }
-        html body aside #profile.edit input {
+        html body aside #profile form.edit input {
           border: 1px solid #33393B;
           padding: 9px;
           cursor: inherit !important; }
-        html body aside #profile.edit .buttons {
+        html body aside #profile form.edit #actions {
           display: block; }
         html body aside #profile form > div {
           margin: 10px;
@@ -212,11 +212,11 @@ html {
             margin: -5px 5px; }
           html body aside #profile form > div .colour i {
             margin-left: 5px; }
-        html body aside #profile form .buttons {
+        html body aside #profile form #actions {
           display: none;
           background: white !important;
           padding: 10px 40px; }
-          html body aside #profile form .buttons .save {
+          html body aside #profile form #actions .save {
             float: right; }
     html body footer {
       grid-area: footer;
