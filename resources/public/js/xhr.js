@@ -18,7 +18,7 @@ var $get, $post, $put, $delete;
         var request = new XMLHttpRequest();
         request.open(method, url, true);
         if(method == "POST" || method == "PUT") {
-            request.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+            request.setRequestHeader('Content-Type', 'application/json');
         }
         request.onload = function() {
           if (request.status >= 200 && request.status < 400) {
@@ -33,7 +33,7 @@ var $get, $post, $put, $delete;
           }
         };
         if(data !== undefined) {
-            data = Object.keys(data).map(key => key + '=' + params[key]).join('&');
+            data = JSON.stringify(data);
         }
         request.send(data);
     };

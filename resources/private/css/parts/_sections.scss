@@ -27,6 +27,17 @@ html {
                     vertical-align: bottom;
                 }
             }
+            button {
+                position: absolute;
+                top: 5px;
+                right: 10px;
+                &::before {
+                    margin-right: 15px;
+                }
+            }
+            #logout {
+                display: none;
+            }
         }
         article {
             grid-area: main;
@@ -131,32 +142,51 @@ html {
             }
             #profile {
                 margin: 10px;
-                > div {
-                    margin: 10px;
-                    background: $sub_color;
-                    label {
-                        padding: 10px;
-                        display: inline-block;
-                        background: $main_color;
-                        color: white;
-                        width: 40%;
+                &.edit {
+                    input {
+                        border: 1px solid $main_color;
+                        padding: 9px;
                     }
-                    span {
-                        padding: 10px;
-                        display: inline-block;
+                    .buttons {
+                        display: block;
                     }
-                    .colour {
-                        div {
-                            width: 32px;
-                            height: 32px;
+                }
+                form {
+                    > div {
+                        margin: 10px;
+                        background: $sub_color;
+                        label {
+                            padding: 10px;
                             display: inline-block;
-                            vertical-align: middle;
-                            border: 1px solid white;
-                            outline: 1px solid #CCC;
-                            margin: -5px 5px;
+                            background: $main_color;
+                            color: white;
+                            width: 40%;
                         }
-                        i {
-                            margin-left: 5px;
+                        input {
+                            width: 276px;
+                            border: 0;
+                            background: transparent;
+                        }
+                        input, span {
+                            padding: 10px;
+                            display: inline-block;
+                        }
+                        .colour {
+                            div {
+                                width: 32px;
+                                height: 32px;
+                                display: inline-block;
+                                vertical-align: middle;
+                                border: 1px solid white;
+                                outline: 1px solid #CCC;
+                                margin: -5px 5px;
+                            }
+                            i {
+                                margin-left: 5px;
+                            }
+                        }
+                        .buttons {
+                            display: none;
                         }
                     }
                 }

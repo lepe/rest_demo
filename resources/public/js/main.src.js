@@ -9,27 +9,37 @@ function getProfilePhoto(id) {
 }
 
 document.addEventListener("DOMContentLoaded", function() {
+
+    function updateProfile(id) {
+        $get(apiUrl + "/person/" + id, function(person) {
+            photo.show = true;
+            photo.img.src = getProfilePhoto(id);
+            profile.name = person.first_name + " " + person.last_name;
+            profile.age = person.age;
+            profile.colour.div.css = person.favourite_colour;
+            profile.colour.i = person.favourite_colour;
+            profile.hobbies.items.length = 0;
+            for(var h in person.hobby) {
+                profile.hobbies.items.push(person.hobby[h]);
+            }
+        });
+    }
+
     var table = m2d2("#table", function(callback) {
         $get(apiUrl + "/people/0/100", function(row) {
             var people = [];
+            var first = 0;
             for(var p in row) {
                 var person = row[p];
+                if(!first) {
+                    first = person.id;
+                }
                 people.push({
                     dataset : { id : person.id },
                     onclick : function(e) {
                         var row = e.target;
                         var id = this.dataset.id;
-                        $get(apiUrl + "/person/" + id, function(person) {
-                            photo.img.src = getProfilePhoto(id);
-                            profile.name = person.first_name + " " + person.last_name;
-                            profile.age = person.age;
-                            profile.colour.div.css = person.favourite_colour;
-                            profile.colour.i = person.favourite_colour;
-                            profile.hobbies.items.length = 0;
-                            for(var h in person.hobby) {
-                                profile.hobbies.items.push(person.hobby[h]);
-                            }
-                        });
+                        updateProfile(id);
                     },
                     photo : {
                         img : {
@@ -47,6 +57,7 @@ document.addEventListener("DOMContentLoaded", function() {
                 });
             }
             callback(people);
+            updateProfile(first);
         }, function() {
             //TODO
             alert("There was a problem while connecting to service.")
@@ -54,12 +65,14 @@ document.addEventListener("DOMContentLoaded", function() {
     });
 
     var photo = m2d2("#photo", {
+        show : false,
         img : {
             src : getProfilePhoto(0)
         }
     });
 
     var profile = m2d2("#profile", {
+        css : "",
         name : "",
         age  : "",
         colour : {
@@ -69,9 +82,40 @@ document.addEventListener("DOMContentLoaded", function() {
             i : ""
         },
         hobbies : {
-            template: "<li>",
+            template: "li",
             items : []
         }
     });
 
+    var login = m2d2("#login", {
+        show: true,
+        onclick: function() {
+            $post(apiUrl + "/auth/login", {
+                user: "admin",
+                pass: "admin"
+            }, function(){
+                login.show = false;
+                logout.show = true;
+                profile.css = "edit";
+            }, function() {
+                alert("NG"); //TODO
+            });
+        }
+    });
+
+    var logout = m2d2("#logout", {
+        show: false,
+        onclick: function() {
+            $get(apiUrl + "/auth/logout", function() {
+                login.show = true;
+                logout.show = false;
+                profile.css = "";
+            });
+        }
+    });
+
+    var hobby_list = m2d2("#hobby_list", {
+        template : "option",
+        items : hobbiesFullList
+    });
 });

@@ -19,7 +19,11 @@
     <link href="/css/font-awesome.css?VERSION" rel="stylesheet" type="text/css" />
 </head>
 <body>
-    <header><h1><img src="/img/logo-32.png" alt="Rest Demo logo" width="32" height="32"> REST DEMO v.1</h1></header>
+    <header>
+        <h1><img src="/img/logo-32.png" alt="Rest Demo logo" width="32" height="32"> REST DEMO v.1</h1>
+        <button id="login" class="fa fa-lock">Login</button>
+        <button id="logout" class="fa fa-unlock red">Logout</button>
+    </header>
     <article>
         <h2>
             <span class="name">Full Name</span>
@@ -43,13 +47,14 @@
         <section id="photo">
             <img src="/img/profiles/0.jpg" width="200" height="200" alt="Name" />
         </section>
-        <section id="profile">
-            <div><label>Name</label><span class="name"></span></div>
-            <div><label>Age</label><span class="age"></span></div>
+        <section id="profile"><form>
+            <div><label>Name</label><input type="text" name="name" class="name" /></div>
+            <div><label>Age</label><input type="number" name="age" class="age"></span></div>
             <div><label>Favourite Colour</label><span class="colour"><div></div><i></i></span></div>
-            <div><label>Hobbies</label><ul class="hobbies"></ul></div>
-            <!-- button>Save</button> -->
-        </section>
+            <div><label>Hobbies</label><input name="hobby" list="hobby_list"/><ul class="hobbies"></ul></div>
+            <div class="buttons"><button class="red">Delete</button><button>Save</button></div>
+            <div id="color_options"></div>
+        </form></section>
     </aside>
     <footer>
         <span class="by">Rest Demo by <a href="http://alepe.com">Alberto Lepe</a></span>
@@ -61,6 +66,7 @@
             <a class="fa fa-linkedin"        href="https://linkedin.com/in/lepe" target="_blank"></a>
         </span>
     </footer>
+    <datalist id="hobby_list"></datalist>
     <!-- ------------------------- scripts ----------------------------- -->
     <script src="/js/xhr.js?VERSION"                    type="text/javascript"></script>
     <script src="/js/m2d2.src.js?VERSION"               type="text/javascript"></script>

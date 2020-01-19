@@ -1,13 +1,7 @@
 // Style for elements and general classes
-input {
-    border: 0;
-    border-radius: 2px;
-    padding: 5px 10px;
-    box-shadow: 0 1px 2px #0009 inset;
-}
 button {
     min-width: 100px;
-    padding: 5px 20px;
+    padding: 10px 20px;
     background-color: $highlight_color;
     border: 0;
     border-radius: 4px;
@@ -16,6 +10,9 @@ button {
     display: inline-block;
     &:hover {
         background-color: #666;
+    }
+    &.red {
+        background-color: $red_color;
     }
 }
 .hidden {
