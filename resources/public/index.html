@@ -27,44 +27,46 @@
             <span class="color" title="Favourite Colour">FC</span>
         </h2>
         <section id="table">
-            <ul>
-                <li>
-                    <span class="photo"><img src="/img/profiles/1.jpg" width="64" height="64" alt="Name" /></span>
-                    <span class="name">Name Here</span>
-                    <span class="age">44</span>
-                    <span class="color"><b></b></span>
-                </li>
-                <li>Aaa</li>
-            </ul>
+            <template>
+                <ul>
+                    <li>
+                        <span class="photo"><img src="/img/profiles/1.jpg" width="64" height="64" alt="Name" /></span>
+                        <span class="name">Name Here</span>
+                        <span class="age">22</span>
+                        <span class="colour"><div></div></span>
+                    </li>
+                </ul>
+            </template>
         </section>
     </article>
     <aside>
         <section id="photo">
-            <img src="/img/profiles/1.jpg" width="200" height="200" alt="Name" />
+            <img src="about:blank" width="200" height="200" alt="Name" />
         </section>
         <section id="profile">
-            <div><label>Name</label><span>Test</span></div>
-            <div><label>Age</label><span></span></div>
-            <div><label>Favourite Colour</label><span></span></div>
-            <div><label>Hobbies</label><span>Hobbies</span></div>
+            <div><label>Name</label><span class="name"></span></div>
+            <div><label>Age</label><span class="age"></span></div>
+            <div><label>Favourite Colour</label><span class="colour"></span></div>
+            <div><label>Hobbies</label><ul class="hobbies"></ul></div>
             <!-- button>Save</button> -->
         </section>
     </aside>
     <footer>
         <span class="by">Rest Demo by <a href="http://alepe.com">Alberto Lepe</a></span>
         <span id="social">
-            <a class="fa fa-stack-overflow" href="http://stack.alepe.com" target="_blank"></a>
-            <a class="fa fa-github" href="http://github.com/lepe" target="_blank"></a>
-            <a class="fa fa-gitlab" href="http://gitlab.com/lepe" target="_blank"></a>
-            <a class="fa fa-facebook-square" href="http://fb.me/lepe.jp" target="_blank"></a>
-            <a class="fa fa-linkedin" href="https://linkedin.com/in/lepe" target="_blank"></a>
+            <a class="fa fa-stack-overflow"  href="http://stack.alepe.com"       target="_blank"></a>
+            <a class="fa fa-github"          href="http://github.com/lepe"       target="_blank"></a>
+            <a class="fa fa-gitlab"          href="http://gitlab.com/lepe"       target="_blank"></a>
+            <a class="fa fa-facebook-square" href="http://fb.me/lepe.jp"         target="_blank"></a>
+            <a class="fa fa-linkedin"        href="https://linkedin.com/in/lepe" target="_blank"></a>
         </span>
     </footer>
     <!-- ------------------------- scripts ----------------------------- -->
-    <script src="/js/m2d2.min.js?VERSION"               type="text/javascript"></script>
+    <script src="/js/xhr.js?VERSION"                    type="text/javascript"></script>
+    <script src="/js/m2d2.src.js?VERSION"               type="text/javascript"></script>
     <script src="/js/m2d2.style.src.js?VERSION"         type="text/javascript"></script>
     <script src="/js/m2d2.show.src.js?VERSION"          type="text/javascript"></script>
     <script src="/js/hobbies.js?VERSION"                type="text/javascript"></script>
-    <script src="/js/main.js?VERSION"                   type="text/javascript"></script>
+    <script src="/js/main.src.js?VERSION"               type="text/javascript"></script>
 </body>
 </html>

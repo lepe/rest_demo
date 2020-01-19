@@ -71,7 +71,7 @@ html {
         margin: 20px 20px 0 20px;
         background: #33393B;
         color: white;
-        padding: 10px 20px;
+        padding: 10px 35px 10px 20px;
         height: 40px;
         border-bottom: 2px solid #71AC69; }
         html body article h2 .name {
@@ -92,15 +92,15 @@ html {
         html body article #table ul {
           margin: 0;
           padding: 0; }
-          html body article #table ul li:nth-child(even) {
-            background-color: #f2f2f2; }
           html body article #table ul li {
             display: grid;
             grid-template-columns: 80px auto 50px 50px;
             grid-template-areas: "photo name age color";
             grid-gap: 0;
             list-style: none;
-            padding: 10px; }
+            padding: 10px;
+            border-bottom: 1px solid #EEE;
+            cursor: pointer; }
             html body article #table ul li span {
               vertical-align: middle;
               line-height: 70px;
@@ -121,10 +121,10 @@ html {
               font-size: 200%;
               line-height: 70px;
               text-align: center; }
-            html body article #table ul li .color {
+            html body article #table ul li .colour {
               grid-area: color;
               text-align: center; }
-              html body article #table ul li .color b {
+              html body article #table ul li .colour div {
                 width: 32px;
                 height: 32px;
                 background: white;
@@ -132,6 +132,8 @@ html {
                 vertical-align: middle;
                 border: 1px solid white;
                 outline: 1px solid #CCC; }
+            html body article #table ul li:hover {
+              background-color: #f2f2f2; }
     html body aside {
       grid-area: side; }
       html body aside #photo {

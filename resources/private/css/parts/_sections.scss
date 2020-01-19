@@ -40,7 +40,7 @@ html {
                 margin: 20px 20px 0 20px;
                 background: $main_color;
                 color: white;
-                padding: 10px 20px;
+                padding: 10px 35px 10px 20px; //35px when the overflow bar is shown
                 height: 40px;
                 border-bottom: 2px solid $highlight_color;
                 .name {
@@ -66,9 +66,6 @@ html {
                 ul {
                     margin: 0;
                     padding: 0;
-                    li:nth-child(even) {
-                        background-color: #f2f2f2;
-                    }
                     li {
                         display: grid;
                         grid-template-columns: 80px auto 50px 50px;
@@ -76,6 +73,8 @@ html {
                         grid-gap: 0;
                         list-style: none;
                         padding: 10px;
+                        border-bottom: 1px solid $sub_color;
+                        cursor: pointer;
                         span {
                             vertical-align: middle;
                             line-height: 70px;
@@ -101,10 +100,10 @@ html {
                             line-height: 70px;
                             text-align: center;
                         }
-                        .color {
+                        .colour {
                             grid-area: color;
                             text-align: center;
-                            b {
+                            div {
                                 width: 32px;
                                 height: 32px;
                                 background: white;
@@ -113,6 +112,9 @@ html {
                                 border: 1px solid white;
                                 outline: 1px solid #CCC;
                             }
+                        }
+                        &:hover {
+                            background-color: #f2f2f2;
                         }
                     }
                 }
