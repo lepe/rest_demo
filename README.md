@@ -32,7 +32,7 @@ To get a list of 20 people from the 11th position:
 
 **Note**: It can retrieve a maximum of 100 records at a time (hardcoded limit).
 
-To search people by name: (partial match allowed)
+To search for people by name: (partial match allowed)
 * [GET] `/api/v1/people/jen`
 * [GET] `/api/v1/people/mike`
 
@@ -242,7 +242,7 @@ To view the logs you can use `lnav` (recommended), `tail -f` or `less -r`.
 (e.g. people search, table sorting, pagination, auto-scrolling, picture upload, picture edition, password change, etc).
 * Profile photos are assigned using person's id, they can not be uploaded or modified.
 * The UI comes with up to 100 different profile photos (above 100, the images will be recycled).
-* It doesn't support pagination, so a maximum of 100 people can be displayed on screen. Ideally it should load and 
+* It doesn't support pagination, so a maximum of 100 people can be displayed on the screen. Ideally it should load and 
 display items as needed (aka RecyclerView).
 
 ## Credits:
