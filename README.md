@@ -2,6 +2,8 @@
 
 This is a REST API which stores, updates, retrieves and deletes Person entities.
 
+API URL: https://rest-demo.alepe.com/api/v1/
+
 ## API usage:
 
 | Function       | Visibility | Method   | URI                               | Response                          |
@@ -136,18 +138,18 @@ In case of mistaken input, the server will respond with HTTP status 400.
 [Full code documentation (JavaDoc)](https://rest-demo.alepe.com/doc/)
 
 ## Technology used:
-* Java `11`
-	* [Spark Framework](http://sparkjava.com/)
-	* [GSON](https://github.com/google/gson)
-* Groovy `2.5.6`
-    * [Intellisrc library](https://gitlab.com/intellisrc/common) (developed by me)
-	* [Spock Unit Test Framework](http://spockframework.org/)
-	* [Groovy HTTPBuilder.RESTClient](https://github.com/jgritman/httpbuilder/wiki/RESTClient)
-* Gradle `5.4.1`
-* Javascript
-    * [M2D2](https://github.com/lepe/m2d2) (Framework developed by me)
-    * [Notie](https://github.com/jaredreich/notie)
-* SQLite
+* Java `11` (API code)
+	* [Spark Framework](http://sparkjava.com/) (Web Server)
+	* [GSON](https://github.com/google/gson) (JSON encoder/decoder)
+* Groovy `2.5.6` (Unit and Integration Tests)
+    * [Intellisrc library](https://gitlab.com/intellisrc/common) (Utilities and wrappers) : Developed by me
+	* [Spock Unit Test Framework](http://spockframework.org/) (Unit Testing)
+	* [Groovy HTTPBuilder.RESTClient](https://github.com/jgritman/httpbuilder/wiki/RESTClient) (Integration Testing)
+* Gradle `5.4.1` (Build Tool)
+* Javascript (User Interface)
+    * [M2D2](https://github.com/lepe/m2d2) (UI Framework) : Developed by me
+    * [Notie](https://github.com/jaredreich/notie) (Notifications)
+* SQLite (Database)
 
 ## Setting up the developing environment:
 
@@ -174,9 +176,10 @@ In case of mistaken input, the server will respond with HTTP status 400.
   sdk install groovy 2.5.6
   sdk install gradle 5.4.1
   ```
+* Import the project in IntelliJ
   
 ### How to build:
-* Execute: `gradle compile` in project directory.
+* Execute: `gradle compile` in the project directory.
 
   The script will create a jar file inside `build/libs/` directory.
 
@@ -196,7 +199,7 @@ In case of mistaken input, the server will respond with HTTP status 400.
   ```
 
 ### How to deploy:
-* Execute: `./deploy [ip|hostname]`
+* Execute: `./deploy.sh user@host:path/to/ [port]`
 
   This script will synchronize with the target host and copy the
 required files to execute the services.
@@ -204,16 +207,19 @@ required files to execute the services.
 ## Setting up the production environment:
 
 ### Requirements:
+
+Server:
+
 * Linux
 * Java 11 JRE
 
 Client:
 
-* Modern Browser (IE and Edge may not be supported)
+* Modern Browser (IE is not supported and Edge may not work)
 
   **Note**: Tested in:
-    - Linux with Chrome, Chromium, Vivaldi, Firefox and Opera.
-    - Android with default browser (Chrome for Mobile)
+    - Chrome, Chromium, Vivaldi, Firefox and Opera on Linux.
+    - Android default browser (Chrome for Mobile)
 
 ### How to run:
 * Execute: `./run`
@@ -231,13 +237,13 @@ To view the logs you can use `lnav` (recommended), `tail -f` or `less -r`.
 ### API :
 * It doesn't support multiple user levels (only `guest` and `admin`).
 * For simplicity, the API is using session based authentication, for a public API, using API Keys or OAuth is recommended.
-* It doesn't provide a way to check if user is logged in or not.
+* It doesn't provide a service to verify if user is logged in or not.
 * Names are limited to `FirstName` + `space` + `LastName`. No middle names or single name allowed.
-* Unicode encoded names (names with characters outside the English alphabet) are not supported for validation simplicity.
-* It supports only a limited number of Colors.
+* Unicode encoded names (names with characters outside the English alphabet) are not supported to simplify validation.
+* By design, it supports only a limited number of Colors.
 
-### UI:
-* UI may not display correctly in Windows and iOS (untested).
+### User Interface:
+* The UI may not be displayed correctly in Windows and iOS (untested).
 * The UI is very simple and can be enhanced in many ways which are outside the scope of this demonstration 
 (e.g. people search, table sorting, pagination, auto-scrolling, picture upload, picture edition, password change, etc).
 * Profile photos are assigned using person's id, they can not be uploaded or modified.
