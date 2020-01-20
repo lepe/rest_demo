@@ -7,12 +7,23 @@ document.addEventListener("DOMContentLoaded", function() {
      * Return the path to the profile photo
      */
     function getProfilePhoto(id) {
+        if(id > 100) {
+            var mult = Math.round(id / 100);
+            id = id - (mult * 100);
+        }
         return "/img/profiles/" + id + ".jpg";
     }
     /**
      * It will create a Hobby element
      */
     function addHobby(text) {
+        var exists = false;
+        for(var h in profile.hobbies.items) {
+            var hobby = profile.hobbies.items[h].text;
+            if(text == hobby) {
+                return; //Already exists.
+            }
+        }
         profile.hobbies.items.push({
            text : text,
            onclick : function(e) {
