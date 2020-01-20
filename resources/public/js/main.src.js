@@ -27,7 +27,7 @@ document.addEventListener("DOMContentLoaded", function() {
                 return; //Already exists.
             }
         }
-        text = text.replace(/[^a-zA-Z ,\'/&-]/gi, '');
+        text = text.replace(/[^0-9a-zA-Z ,\'/&-]/gi, '');
         profile.hobbies.items.push({
            text : text,
            onclick : function(e) {
