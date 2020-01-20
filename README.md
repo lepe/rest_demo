@@ -2,8 +2,13 @@
 
 This is a REST API which stores, updates, retrieves and deletes Person entities.
 
-API URL: https://rest-demo.alepe.com/api/v1/
+API URL: https://rest-demo.alepe.com/api/v1/ 
 
+Demo Site: https://rest-demo.alepe.com/ <br>
+   (password: admin) 
+   
+JavaDoc:  https://rest-demo.alepe.com/doc/ 
+   
 ## API usage:
 
 | Function       | Visibility | Method   | URI                               | Response                          |
@@ -16,11 +21,6 @@ API URL: https://rest-demo.alepe.com/api/v1/
 | Create person  | Private    | POST     | /api/v1/person                    | Object : new id and status        |
 | Update person  | Private    | PUT      | /api/v1/person/$id                | Object : status                   |
 | Remove person  | Private    | DELETE   | /api/v1/person/$id                | Object : status                   |
-
-### Demo:
-
-[Rest Demo](https://rest-demo.alepe.com/) <br>
-(password: admin)
 
 ### Examples:
 
@@ -134,8 +134,6 @@ Response example for create and update:
 ```
 In case no data were found, it will respond with HTTP status 204. <br>
 In case of mistaken input, the server will respond with HTTP status 400.
-
-[Full code documentation (JavaDoc)](https://rest-demo.alepe.com/doc/)
 
 ## Technology used:
 * Java `11` (API code)
