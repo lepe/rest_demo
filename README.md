@@ -27,16 +27,16 @@ JavaDoc:  https://rest-demo.alepe.com/doc/
 #### Public 
 
 To get a list of the first 10 people:
-* [GET] `/api/v1/people/1/10`
+* [GET] [/api/v1/people/1/10](https://rest-demo.alepe.com/api/v1/people/1/10)
 
 To get a list of 20 people from the 11th position:
-* [GET] `/api/v1/people/11/20`
+* [GET] [/api/v1/people/11/20](https://rest-demo.alepe.com/api/v1/people/11/20)
 
 **Note**: It can retrieve a maximum of 100 records at a time (hardcoded limit).
 
 To search for people by name: (partial match allowed)
-* [GET] `/api/v1/people/jen`
-* [GET] `/api/v1/people/mike`
+* [GET] [/api/v1/people/jen](https://rest-demo.alepe.com/api/v1/people/jen)
+* [GET] [/api/v1/people/mike](https://rest-demo.alepe.com/api/v1/people/mike)
 
 Response example for `people` request:
 ```json
@@ -61,7 +61,7 @@ Response example for `people` request:
 ```
 
 To get a single person:
-* [GET] `/api/v1/person/12`
+* [GET] [/api/v1/person/12](https://rest-demo.alepe.com/api/v1/person/12)
 
 Response example:
 ```json
