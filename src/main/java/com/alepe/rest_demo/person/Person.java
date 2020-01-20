@@ -324,7 +324,7 @@ public class Person {
                     } else if (input.get(key) instanceof String) {
                         String hobby = ((String) input.get(key)).trim();
                         if(! hobby.isEmpty()) {
-                            if(hobby.matches("[a-zA-Z ,]+")) {
+                            if(hobby.matches("[a-zA-Z ,'/&-]+")) {
                                 hobbies = hobby.split(",");
                             } else {
                                 Log.w("Hobby [%s] contained unknown characters.", hobby);

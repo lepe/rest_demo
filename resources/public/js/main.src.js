@@ -3,6 +3,9 @@ var apiUrl = "/api/v1";
 
 document.addEventListener("DOMContentLoaded", function() {
     var editId = 0;
+
+    ///////////////////// Private functions ////////////////////////////
+
     /**
      * Return the path to the profile photo
      */
@@ -24,6 +27,7 @@ document.addEventListener("DOMContentLoaded", function() {
                 return; //Already exists.
             }
         }
+        text = text.replace(/[^a-zA-Z ,\'/&-]/gi, '');
         profile.hobbies.items.push({
            text : text,
            onclick : function(e) {
@@ -43,9 +47,12 @@ document.addEventListener("DOMContentLoaded", function() {
                 photo.show = true;
                 photo.img.src = getProfilePhoto(id);
                 profile.name.value = person.first_name + " " + person.last_name;
+                profile.name._node.value = profile.name.value;
                 profile.age.value = person.age;
+                profile.age._node.value = profile.age.value;
                 profile.colour.b.css = person.favourite_colour;
-                profile.colour.favourite = person.favourite_colour;
+                profile.favourite.value = person.favourite_colour;
+                profile.favourite._node.value = profile.favourite.value;
                 profile.hobbies.items.length = 0;
                 for(var h in person.hobby) {
                     addHobby(person.hobby[h]);
@@ -58,9 +65,13 @@ document.addEventListener("DOMContentLoaded", function() {
         } else {
             photo.img.src = getProfilePhoto(id);
             profile.name.value = "";
+            profile.name._node.value = profile.name.value;
             profile.age.value = "";
-            profile.colour.b.css = "white";
+            profile.age._node.value = profile.age.value;
+            profile.colour.b.css = "none";
             profile.colour.i = "";
+            profile.favourite.value = "none";
+            profile.favourite._node.value = profile.favourite.value;
             profile.hobbies.items.length = 0;
             editId = 0;
         }
@@ -99,6 +110,37 @@ document.addEventListener("DOMContentLoaded", function() {
           position: "top",
         }, yes, no || function() {});
     }
+    /*
+     * Actions to perform during login / logout
+     * @param isOn: true = login, false = logout
+     */
+    function authLogin(isIn) {
+        if(isIn) {
+            loading.show = false;
+            login.show = false;
+            logout.show = true;
+            profile.form.css = "edit";
+            // Set editable fields:
+            profile.name.readOnly = false;
+            profile.age.readOnly = false;
+            profile.hobby.readOnly = false;
+            profile.name.title = "Names are only accepted in the format: 'first_name<space>last_name'";
+            sessionStorage.setItem("logged", true);
+        } else {
+            loading.show = false;
+            login.show = true;
+            logout.show = false;
+            profile.form.css = "";
+            // Readonly fields:
+            profile.name.readOnly = true;
+            profile.age.readOnly = true;
+            profile.hobby.readOnly = true;
+            profile.name.title = "";
+            sessionStorage.removeItem("logged");
+        }
+    }
+
+    /////////////////////////// M2D2 Objects ////////////////////////
 
     //Loading pane
     var loading = m2d2("#loading", {
@@ -209,26 +251,45 @@ document.addEventListener("DOMContentLoaded", function() {
             readOnly : true,
             placeholder: "First Last",
             pattern  : "^[A-Za-z]+\\s[A-Za-z]+$",
-            title    : ""
+            title    : "",
+            onkeydown : function(e) {
+                if(e.keyCode === 13){
+                    e.preventDefault();
+                    profile.age._node.focus();
+                    return false;
+                }
+            }
         },
         age  : {
             value : "",
             min : 1,
             max : 110,
             required : true,
-            readOnly : true
+            readOnly : true,
+            onkeydown : function(e) {
+                if(e.keyCode === 13){
+                    e.preventDefault();
+                    return false;
+                }
+            }
         },
         colour : {
             b : {
                 css : ""
+            }
+        },
+        favourite : {
+            value : "",
+            onchange : function() {
+                profile.colour.b.css = this.value;
             },
-            favourite : {
-                value : "",
-                onchange : function() {
-                    profile.colour.b.css = this.value;
-                },
-                onmousedown : function() {
-                    return profile.form.css == "edit";
+            onmousedown : function() {
+                return profile.form.css == "edit";
+            },
+            onkeydown : function(e) {
+                if(e.keyCode === 13){
+                    e.preventDefault();
+                    return false;
                 }
             }
         },
@@ -277,6 +338,7 @@ document.addEventListener("DOMContentLoaded", function() {
             onclick: function() {
                 actions.disabled = true;
                 updateProfile(0);
+                profile.name._node.focus();
                 return false;
             }
         }
@@ -296,20 +358,13 @@ document.addEventListener("DOMContentLoaded", function() {
                 $post(apiUrl + "/auth/login", {
                     user: "admin",
                     pass: value
-                }, function(){
-                    loading.show = false;
-                    login.show = false;
-                    logout.show = true;
-                    profile.form.css = "edit";
-                    // Set editable fields:
-                    profile.name.readOnly = false;
-                    profile.age.readOnly = false;
-                    profile.hobby.readOnly = false;
-                    profile.name.title = "Names are only accepted in the format: 'first_name<space>last_name'";
+                }, function() {
+                    authLogin(true);
                     ok("Login succeed!");
                 }, function() {
                     loading.show = false;
                     ng("Login failed!");
+                    authLogin(false);
                 });
             }, function (value) {});
             return false;
@@ -322,15 +377,7 @@ document.addEventListener("DOMContentLoaded", function() {
         onclick: function() {
             loading.show = true;
             $get(apiUrl + "/auth/logout", function() {
-                loading.show = false;
-                login.show = true;
-                logout.show = false;
-                profile.form.css = "";
-                // Readonly fields:
-                profile.name.readOnly = true;
-                profile.age.readOnly = true;
-                profile.hobby.readOnly = true;
-                profile.name.title = "";
+                authLogin(false);
                 ok("Logged out");
             }, function() {
                 loading.show = true;
@@ -344,4 +391,9 @@ document.addEventListener("DOMContentLoaded", function() {
         template : "option",
         items : hobbiesFullList
     });
+
+    //////////////////////////// INIT //////////////////////
+    if(sessionStorage.getItem("logged") == "true") {
+        authLogin(true);
+    }
 });

@@ -9,8 +9,8 @@ This is a REST API which stores, updates, retrieves and deletes Person entities.
 | List people    | Public     | GET      | /api/v1/people/$offset/$limit     | Array of objects : people list    |
 | Search people  | Public     | GET      | /api/v1/people/$keyword           | Array of objects : people list    |
 | Get person     | Public     | GET      | /api/v1/person/$id                | Object : person                   |
-| Authentication | Public     | POST     | /api/v1/auth/login                | Object : status                   |
-| Logout         | Public     | GET      | /api/v1/auth/logout               | Object : status                   |
+| Authentication | Public     | POST     | /api/v1/auth/login                |                                   |
+| Logout         | Public     | GET      | /api/v1/auth/logout               |                                   |
 | Create person  | Private    | POST     | /api/v1/person                    | Object : new id and status        |
 | Update person  | Private    | PUT      | /api/v1/person/$id                | Object : status                   |
 | Remove person  | Private    | DELETE   | /api/v1/person/$id                | Object : status                   |
@@ -223,19 +223,24 @@ To view the logs you can use `lnav` (recommended), `tail -f` or `less -r`.
   It will launch an interactive console. The available commands can be displayed
 typing: `help`. To display all records, for example, type: `list`.
 
-## API and UI Limitations:
+## Limitations:
 
-* The API doesn't support multiple user levels (only `guest` and `admin`).
+### API :
+* It doesn't support multiple user levels (only `guest` and `admin`).
 * For simplicity, the API is using session based authentication, for a public API, using API Keys or OAuth is recommended.
-* UI may not display correctly in Windows and iOS (untested).
-* The UI is very simple and can be enhanced in many ways which are outside the scope of this demonstration.
+* It doesn't provide a way to check if user is logged in or not.
 * Names are limited to `FirstName` + `space` + `LastName`. No middle names or single name allowed.
 * Unicode encoded names (names with characters outside the English alphabet) are not supported for validation simplicity.
+* It supports only a limited number of Colors.
+
+### UI:
+* UI may not display correctly in Windows and iOS (untested).
+* The UI is very simple and can be enhanced in many ways which are outside the scope of this demonstration 
+(e.g. people search, table sorting, pagination, auto-scrolling, picture upload, picture edition, password change, etc).
 * Profile photos are assigned using person's id, they can not be uploaded or modified.
-* The system comes with up to 100 different profile photos (above 100, the images will be recycled).
-* The UI doesn't support pagination, so a maximum of 100 people can be displayed on screen. Ideally it should load and 
+* The UI comes with up to 100 different profile photos (above 100, the images will be recycled).
+* It doesn't support pagination, so a maximum of 100 people can be displayed on screen. Ideally it should load and 
 display items as needed (aka RecyclerView).
-* The system supports a limited number of Colors (sorry no navy, ivory, honey, cherry, etc).
 
 ## Credits:
 
