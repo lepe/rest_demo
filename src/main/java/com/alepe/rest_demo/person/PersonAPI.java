@@ -6,6 +6,7 @@ import com.intellisrc.web.ServiciableMultiple;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Sets the API Route Controller for CRUD operations related to Person
@@ -43,6 +44,9 @@ public class PersonAPI implements ServiciableMultiple {
     @Override
     public List<Service> getServices() {
         List<Service> services = new ArrayList<>();
+        Service defaultService = new Service() {};
+        defaultService.setAction((Service.Action) () -> Map.of("status", "ok"));
+        services.add(defaultService);
         // List Person service:
         services.add(new PersonListService("people/:offset/:qty"));
         // Get Person service:
