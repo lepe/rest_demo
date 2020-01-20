@@ -36,7 +36,7 @@ To get a list of 20 people from the 11th position:
 
 To search for people by name: (partial match allowed)
 * [GET] [/api/v1/people/jen](https://rest-demo.alepe.com/api/v1/people/jen)
-* [GET] [/api/v1/people/mike](https://rest-demo.alepe.com/api/v1/people/mike)
+* [GET] [/api/v1/people/san](https://rest-demo.alepe.com/api/v1/people/san)
 
 Response example for `people` request:
 ```json
