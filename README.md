@@ -15,6 +15,11 @@ This is a REST API which stores, updates, retrieves and deletes Person entities.
 | Update person  | Private    | PUT      | /api/v1/person/$id                | Object : status                   |
 | Remove person  | Private    | DELETE   | /api/v1/person/$id                | Object : status                   |
 
+### Demo:
+
+[Rest Demo](https://rest-demo.alepe.com/) <br>
+(password: admin)
+
 ### Examples:
 
 #### Public 
@@ -128,11 +133,12 @@ Response example for create and update:
 In case no data were found, it will respond with HTTP status 204. <br>
 In case of mistaken input, the server will respond with HTTP status 400.
 
+[Full code documentation (JavaDoc)](https://rest-demo.alepe.com/doc/)
+
 ## Technology used:
 * Java `11`
 	* [Spark Framework](http://sparkjava.com/)
 	* [GSON](https://github.com/google/gson)
-	* [JLine](https://jline.github.io/)
 * Groovy `2.5.6`
     * [Intellisrc library](https://gitlab.com/intellisrc/common) (developed by me)
 	* [Spock Unit Test Framework](http://spockframework.org/)
@@ -170,10 +176,9 @@ In case of mistaken input, the server will respond with HTTP status 400.
   ```
   
 ### How to build:
-* Execute: `./compile` in project directory.
+* Execute: `gradle compile` in project directory.
 
   The script will create a jar file inside `build/libs/` directory.
-  Alternatively you can run: `gradle shadowJar`
 
 ### How to run tests:
 * Execute: `gradle test`
@@ -187,7 +192,7 @@ In case of mistaken input, the server will respond with HTTP status 400.
   Finally:
   ```
   BUILD SUCCESSFUL in 42s
-  3 actionable tasks: 1 executed, 2 up-to-date
+  3 actionable tasks: 3 executed
   ```
 
 ### How to deploy:
@@ -216,12 +221,6 @@ You can also execute: `./run stop` to stop the service or
 ### Maintenance:
 * Logs are printed into `<application dir>/logs/` directory. 
 To view the logs you can use `lnav` (recommended), `tail -f` or `less -r`.
-
-* The database can be explored using the service console:
-`./run console`
-
-  It will launch an interactive console. The available commands can be displayed
-typing: `help`. To display all records, for example, type: `list`.
 
 ## Limitations:
 

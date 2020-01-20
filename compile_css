@@ -1,3 +1,0 @@
-#!/bin/bash
-scss resources/private/css/style.scss resources/public/css/style.css
-scss resources/private/css/notie.scss resources/public/css/notie.css

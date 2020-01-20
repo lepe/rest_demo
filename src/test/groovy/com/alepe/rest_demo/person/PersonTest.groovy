@@ -15,48 +15,36 @@ class PersonTest extends Specification {
      * Initialization for all tests
      * @return
      */
-    def setup() {
+    def setupSpec() {
         Database.init()
+        File dbFile = SysInfo.getFile(Config.get("db.name", "rest") + ".db")
+        if(dbFile.exists()) {
+            dbFile.delete()
+        }
+        Person.initDB()
+        assert dbFile.exists()
+        assert ! dbFile.empty
+        assert ! Person.getAll(0, 1).empty
     }
     /**
      * Cleanup for all tests
      * @return
      */
-    def cleanup() {
+    def cleanupSpec() {
         Database.quit()
+    
+        File dbFile = SysInfo.getFile(Config.get("db.name", "rest") + ".db")
+        if(dbFile.exists()) {
+            dbFile.delete()
+        }
     }
-
-    /**
-     * This test will verify that the DB can be created correctly
-     */
-    def "Must create database"() {
-        setup: "Prepare database and insert data"
-            File dbFile = SysInfo.getFile(Config.get("db.name", "rest") + ".db")
-            if(dbFile.exists()) {
-                dbFile.delete()
-            }
-            Person.initDB()
-
-        expect: "Database file must exists and we must be able to get at least 1 person"
-            assert dbFile.exists() //TODO: sometimes its reporting failure here when running from gradle. check why
-            assert ! dbFile.empty
-            assert ! Person.getAll(0, 1).empty
-        
-        cleanup: "Remove database"
-            if(dbFile.exists()) {
-                dbFile.delete()
-            }
-    }
-
+    
     /**
      * This test will verify that Person is being created in the database
      * Then it will delete it and verify that it was deleted correctly
      * @return
      */
     def "Must insert and delete Person"() {
-        setup: "Initialize database"
-            Person.initDB()
-        
         when: "Create the Person object:"
             Color colorObj = Color.fromString(color)
             String[] hobbyList = hobby.split(",")
@@ -103,7 +91,6 @@ class PersonTest extends Specification {
      */
     def "should update Person's age or fail if incorrect"() {
         setup: "Create the Person object:"
-            Person.initDB()
             Color colorObj = Color.fromString("red")
             String[] hobby = ["reading"]
             Person person = new Person("Ben", "Walkman", 22, colorObj, hobby)
@@ -133,7 +120,6 @@ class PersonTest extends Specification {
      */
     def "should update Person's name or fail if incorrect"() {
         setup: "Create the Person object:"
-            Person.initDB()
             Color colorObj = Color.fromString("white")
             String[] hobby = ["reading"]
             Person person = new Person("Ben", "Walkman", 22, colorObj, hobby)
@@ -167,7 +153,6 @@ class PersonTest extends Specification {
      */
     def "should update Person's favourite color"() {
         setup: "Create the Person object:"
-            Person.initDB()
             Color colorObj = Color.fromString("blue")
             assert colorObj == Color.BLUE
             String[] hobby = ["reading","writing"]
@@ -199,7 +184,6 @@ class PersonTest extends Specification {
      */
     def "Search must return correct Person objects"() {
         setup: "Create the list in which we are going to search"
-            Person.initDB()
             List<Person> list = []
             def people = [
                     [

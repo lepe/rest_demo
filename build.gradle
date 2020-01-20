@@ -7,6 +7,7 @@ buildscript {
     dependencies {
         classpath 'org.jfrog.buildinfo:build-info-extractor-gradle:4.+'
         classpath 'com.github.jengelman.gradle.plugins:shadow:2.0.4'
+        classpath "gradle.plugin.com.github.salomonbrys.gradle.sass:Gradle-Sass:1.2.0"
     }
 }
 
@@ -16,8 +17,9 @@ plugins {
     id 'idea'
     id 'maven'
     id 'maven-publish'
-    id "com.jfrog.artifactory" version "4.9.6"
+    id 'com.jfrog.artifactory' version '4.9.6'
     id 'com.github.johnrengelman.shadow' version '2.0.4'
+    id 'com.github.salomonbrys.gradle.sass' version '1.2.0'
 }
 
 group groupName
@@ -59,6 +61,23 @@ shadowJar {
     classifier = "linux-x86_64"
     zip64 = true
     shadowJar.finalizedBy copyRuntimeLibs
+}
+
+sass {
+    download {
+        version = "1.25.0"
+    }
+}
+
+sassCompile {
+    source = file("resources/private/css")
+    outputDir = file("resources/public/css")
+}
+
+task compile (dependsOn: [shadowJar, sassCompile]) {
+    println "-----------------------------"
+    println "Building jar at: build/libs/"
+    println "-----------------------------"
 }
 
 //create a single Jar with all dependencies

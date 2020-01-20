@@ -1,5 +1,5 @@
 var apiUrl = "/api/v1";
-//var apiUrl = "http://rest-demo.alepe.com/api/v1";
+//var apiUrl = "https://rest-demo.alepe.com/api/v1";
 
 document.addEventListener("DOMContentLoaded", function() {
     var editId = 0;

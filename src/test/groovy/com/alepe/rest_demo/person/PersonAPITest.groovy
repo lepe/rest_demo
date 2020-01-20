@@ -2,6 +2,9 @@ package com.alepe.rest_demo.person
 
 import com.alepe.rest_demo.Main
 import com.alepe.rest_demo.types.Color
+import com.intellisrc.core.Config
+import com.intellisrc.core.SysInfo
+import com.intellisrc.db.Database
 import groovyx.net.http.ContentType
 import groovyx.net.http.HttpResponseException
 import groovyx.net.http.RESTClient
@@ -20,6 +23,33 @@ class PersonAPITest extends Specification {
     Main main = new Main()
     @Shared
     def client = new RESTClient( "http://localhost:" + main.port)
+    /**
+     * Initialization for all tests
+     * @return
+     */
+    def setupSpec() {
+        Database.init()
+        File dbFile = SysInfo.getFile(Config.get("db.name", "rest") + ".db")
+        if(dbFile.exists()) {
+            dbFile.delete()
+        }
+        Person.initDB()
+        assert dbFile.exists()
+        assert ! dbFile.empty
+        assert ! Person.getAll(0, 1).empty
+    }
+    /**
+     * Cleanup for all tests
+     * @return
+     */
+    def cleanupSpec() {
+        Database.quit()
+        
+        File dbFile = SysInfo.getFile(Config.get("db.name", "rest") + ".db")
+        if(dbFile.exists()) {
+            dbFile.delete()
+        }
+    }
     /**
      * Login into system
      * This is used to be able to execute restricted services.

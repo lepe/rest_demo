@@ -1,35 +1,46 @@
 b.none {
-  background-color: #CCC; }
+  background-color: #CCC;
+}
 
 b.white {
-  background-color: white; }
+  background-color: white;
+}
 
 b.black {
-  background-color: black; }
+  background-color: black;
+}
 
 b.red {
-  background-color: #C23825; }
+  background-color: #C23825;
+}
 
 b.blue {
-  background-color: #227FBB; }
+  background-color: #227FBB;
+}
 
 b.green {
-  background-color: #19AF5D; }
+  background-color: #19AF5D;
+}
 
 b.yellow {
-  background-color: #F3C501; }
+  background-color: #F3C501;
+}
 
 b.orange {
-  background-color: #D55400; }
+  background-color: #D55400;
+}
 
 b.purple {
-  background-color: #8F40AF; }
+  background-color: #8F40AF;
+}
 
 b.pink {
-  background-color: #DA549F; }
+  background-color: #DA549F;
+}
 
 b.brown {
-  background-color: #AF5740; }
+  background-color: #AF5740;
+}
 
 button {
   min-width: 100px;
@@ -39,260 +50,322 @@ button {
   border-radius: 4px;
   cursor: pointer;
   color: white;
-  display: inline-block; }
-  button:hover {
-    background-color: #666; }
-  button.red {
-    background-color: #C23825; }
-  button.blue {
-    background-color: #227FBB; }
+  display: inline-block;
+}
+button:hover {
+  background-color: #666;
+}
+button.red {
+  background-color: #C23825;
+}
+button.blue {
+  background-color: #227FBB;
+}
 
 .hidden {
-  display: none; }
+  display: none;
+}
 
 h1, h2, h3 {
-  margin: 0; }
+  margin: 0;
+}
 
 a, a:visited {
   color: #2970ce;
-  text-decoration: none; }
-  a:hover, a:visited:hover {
-    text-decoration: underline; }
-  a.white, a:visited.white {
-    color: white; }
-    a.white:hover, a:visited.white:hover {
-      color: #EEE; }
-  a.red, a:visited.red {
-    color: #33393B; }
+  text-decoration: none;
+}
+a:hover, a:visited:hover {
+  text-decoration: underline;
+}
+a.white, a:visited.white {
+  color: white;
+}
+a.white:hover, a:visited.white:hover {
+  color: #EEE;
+}
+a.red, a:visited.red {
+  color: #33393B;
+}
 
 html {
-  background: white; }
-  html * {
-    box-sizing: border-box;
-    font-family: 'Poppins', 'Verdana', sans-serif;
-    font-size: 16px; }
-  html body {
-    margin: 0;
-    padding: 0;
-    display: grid;
-    grid-template-columns: auto 500px;
-    grid-template-rows: auto;
-    grid-template-areas: "header header" "main side" "footer footer";
-    grid-gap: 0; }
-    html body header {
-      grid-area: header;
-      background-color: #33393B;
-      color: white;
-      height: 50px; }
-      html body header h1 {
-        margin: 0px;
-        padding: 8px;
-        font-size: 20px; }
-        html body header h1 img {
-          vertical-align: bottom; }
-      html body header button {
-        position: fixed;
-        top: 5px;
-        right: 10px; }
-        html body header button::before {
-          margin-right: 15px; }
-      html body header #logout {
-        display: none; }
-    html body article {
-      grid-area: main;
-      height: calc(100vh - 100px);
-      background: #EEE; }
-      html body article h2 {
-        display: grid;
-        grid-template-columns: auto 50px 50px;
-        grid-template-areas: "nameh ageh colorh";
-        grid-gap: 0;
-        margin: 20px 20px 0 20px;
-        background: #33393B;
-        color: white;
-        padding: 10px 35px 10px 20px;
-        height: 40px;
-        border-bottom: 2px solid #71AC69; }
-        html body article h2 .name {
-          grid-area: nameh; }
-        html body article h2 .age {
-          grid-area: ageh;
-          text-align: center; }
-        html body article h2 .color {
-          grid-area: colorh;
-          text-align: center; }
-      html body article #table {
-        background: white;
-        margin: 0 20px 20px 20px;
-        padding: 10px;
-        height: calc(100vh - 182px);
-        overflow-x: hidden;
-        overflow-y: auto; }
-        html body article #table ul {
-          margin: 0;
-          padding: 0; }
-          html body article #table ul li {
-            display: grid;
-            grid-template-columns: 80px auto 50px 50px;
-            grid-template-areas: "photo name age color";
-            grid-gap: 0;
-            list-style: none;
-            padding: 10px;
-            border-bottom: 1px solid #EEE;
-            cursor: pointer; }
-            html body article #table ul li span {
-              vertical-align: middle;
-              line-height: 70px;
-              font-size: 200%;
-              white-space: nowrap; }
-            html body article #table ul li .photo {
-              grid-area: photo;
-              border: 1px solid #CCC;
-              width: 70px;
-              height: 70px;
-              text-align: center;
-              vertical-align: middle; }
-              html body article #table ul li .photo img {
-                margin: 2px; }
-            html body article #table ul li .name {
-              grid-area: name; }
-            html body article #table ul li .age {
-              grid-area: age;
-              font-size: 200%;
-              line-height: 70px;
-              text-align: center; }
-            html body article #table ul li .colour {
-              grid-area: color;
-              text-align: center; }
-              html body article #table ul li .colour b {
-                width: 32px;
-                height: 32px;
-                display: inline-block;
-                vertical-align: middle;
-                border: 1px solid white;
-                outline: 1px solid #CCC; }
-            html body article #table ul li:hover {
-              background-color: #f2f2f2; }
-    html body aside {
-      grid-area: side; }
-      html body aside #close {
-        font-size: 200%;
-        position: absolute;
-        right: 10px;
-        top: 10px;
-        color: #C23825;
-        display: none; }
-      html body aside #photo {
-        width: 212px;
-        height: 212px;
-        margin: 20px auto;
-        display: block;
-        border: 4px solid #ccc;
-        padding: 2px; }
-      html body aside #profile {
-        margin: 10px; }
-        html body aside #profile form.edit input {
-          border: 1px solid #33393B;
-          padding: 9px;
-          cursor: inherit !important; }
-        html body aside #profile form.edit select {
-          -webkit-appearance: menulist;
-          -moz-appearance: menulist;
-          appearance: menulist; }
-        html body aside #profile form.edit #actions {
-          display: block; }
-        html body aside #profile form.edit .hobbies li {
-          cursor: pointer; }
-          html body aside #profile form.edit .hobbies li:hover {
-            background-color: #f2f2f2; }
-        html body aside #profile form > div {
-          margin: 10px;
-          background: #EEE; }
-          html body aside #profile form > div label {
-            padding: 10px;
-            display: inline-block;
-            background: #33393B;
-            color: white;
-            width: 40%; }
-          html body aside #profile form > div select {
-            padding: 10px;
-            margin: -10px 0;
-            width: calc(100% - 48px);
-            -webkit-appearance: none;
-            -moz-appearance: none;
-            appearance: none; }
-          html body aside #profile form > div input, html body aside #profile form > div select {
-            border: 0;
-            background: transparent;
-            cursor: default; }
-          html body aside #profile form > div input, html body aside #profile form > div span {
-            padding: 10px;
-            display: inline-block;
-            width: 60%; }
-          html body aside #profile form > div .colour b {
-            width: 32px;
-            height: 32px;
-            display: inline-block;
-            vertical-align: middle;
-            border: 1px solid white;
-            outline: 1px solid #CCC;
-            margin: -5px 5px; }
-          html body aside #profile form > div .colour i {
-            margin-left: 5px; }
-          html body aside #profile form > div .hobbies {
-            margin: 0;
-            padding: 10px;
-            min-height: 60px; }
-            html body aside #profile form > div .hobbies li {
-              list-style: none;
-              border: 1px solid #CCC;
-              padding: 5px;
-              display: inline-block;
-              background: white;
-              margin: 2px; }
-        html body aside #profile form #actions {
-          display: none;
-          background: white !important;
-          padding: 10px;
-          text-align: center; }
-          html body aside #profile form #actions button {
-            margin: 0 10px; }
-    html body footer {
-      grid-area: footer;
-      height: 50px;
-      background: #33393B;
-      line-height: 40px;
-      padding: 5px 20px;
-      color: white; }
-      html body footer .by a {
-        color: #71AC69 !important; }
-      html body footer #social {
-        float: right; }
-      html body footer a {
-        color: white !important;
-        padding: 0 5px; }
-  html #loading {
-    position: fixed;
-    top: 0;
-    right: 0;
-    left: 0;
-    bottom: 0;
-    display: none; }
-    html #loading div {
-      line-height: 88px;
-      height: 88px;
-      text-align: center;
-      color: white;
-      font-size: 100%;
-      background: #000D;
-      width: 300px;
-      margin: auto;
-      border-radius: 8px;
-      position: absolute;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      top: 0; }
+  background: white;
+}
+html * {
+  box-sizing: border-box;
+  font-family: "Poppins", "Verdana", sans-serif;
+  font-size: 16px;
+}
+html body {
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: auto 500px;
+  grid-template-rows: auto;
+  grid-template-areas: "header header" "main side" "footer footer";
+  grid-gap: 0;
+}
+html body header {
+  grid-area: header;
+  background-color: #33393B;
+  color: white;
+  height: 50px;
+}
+html body header h1 {
+  margin: 0px;
+  padding: 8px;
+  font-size: 20px;
+}
+html body header h1 img {
+  vertical-align: bottom;
+}
+html body header button {
+  position: fixed;
+  top: 5px;
+  right: 10px;
+}
+html body header button::before {
+  margin-right: 15px;
+}
+html body header #logout {
+  display: none;
+}
+html body article {
+  grid-area: main;
+  height: calc(100vh - 100px);
+  background: #EEE;
+}
+html body article h2 {
+  display: grid;
+  grid-template-columns: auto 50px 50px;
+  grid-template-areas: "nameh ageh colorh";
+  grid-gap: 0;
+  margin: 20px 20px 0 20px;
+  background: #33393B;
+  color: white;
+  padding: 10px 35px 10px 20px;
+  height: 40px;
+  border-bottom: 2px solid #71AC69;
+}
+html body article h2 .name {
+  grid-area: nameh;
+}
+html body article h2 .age {
+  grid-area: ageh;
+  text-align: center;
+}
+html body article h2 .color {
+  grid-area: colorh;
+  text-align: center;
+}
+html body article #table {
+  background: white;
+  margin: 0 20px 20px 20px;
+  padding: 10px;
+  height: calc(100vh - 182px);
+  overflow-x: hidden;
+  overflow-y: auto;
+}
+html body article #table ul {
+  margin: 0;
+  padding: 0;
+}
+html body article #table ul li {
+  display: grid;
+  grid-template-columns: 80px auto 50px 50px;
+  grid-template-areas: "photo name age color";
+  grid-gap: 0;
+  list-style: none;
+  padding: 10px;
+  border-bottom: 1px solid #EEE;
+  cursor: pointer;
+}
+html body article #table ul li span {
+  vertical-align: middle;
+  line-height: 70px;
+  font-size: 200%;
+  white-space: nowrap;
+}
+html body article #table ul li .photo {
+  grid-area: photo;
+  border: 1px solid #CCC;
+  width: 70px;
+  height: 70px;
+  text-align: center;
+  vertical-align: middle;
+}
+html body article #table ul li .photo img {
+  margin: 2px;
+}
+html body article #table ul li .name {
+  grid-area: name;
+}
+html body article #table ul li .age {
+  grid-area: age;
+  font-size: 200%;
+  line-height: 70px;
+  text-align: center;
+}
+html body article #table ul li .colour {
+  grid-area: color;
+  text-align: center;
+}
+html body article #table ul li .colour b {
+  width: 32px;
+  height: 32px;
+  display: inline-block;
+  vertical-align: middle;
+  border: 1px solid white;
+  outline: 1px solid #CCC;
+}
+html body article #table ul li:hover {
+  background-color: #f2f2f2;
+}
+html body aside {
+  grid-area: side;
+}
+html body aside #close {
+  font-size: 200%;
+  position: absolute;
+  right: 10px;
+  top: 10px;
+  color: #C23825;
+  display: none;
+}
+html body aside #photo {
+  width: 212px;
+  height: 212px;
+  margin: 20px auto;
+  display: block;
+  border: 4px solid #ccc;
+  padding: 2px;
+}
+html body aside #profile {
+  margin: 10px;
+}
+html body aside #profile form.edit input {
+  border: 1px solid #33393B;
+  padding: 9px;
+  cursor: inherit !important;
+}
+html body aside #profile form.edit select {
+  -webkit-appearance: menulist;
+  -moz-appearance: menulist;
+  appearance: menulist;
+}
+html body aside #profile form.edit #actions {
+  display: block;
+}
+html body aside #profile form.edit .hobbies li {
+  cursor: pointer;
+}
+html body aside #profile form.edit .hobbies li:hover {
+  background-color: #f2f2f2;
+}
+html body aside #profile form > div {
+  margin: 10px;
+  background: #EEE;
+}
+html body aside #profile form > div label {
+  padding: 10px;
+  display: inline-block;
+  background: #33393B;
+  color: white;
+  width: 40%;
+}
+html body aside #profile form > div select {
+  padding: 10px;
+  margin: -10px 0;
+  width: calc(100% - 48px);
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+}
+html body aside #profile form > div input, html body aside #profile form > div select {
+  border: 0;
+  background: transparent;
+  cursor: default;
+}
+html body aside #profile form > div input, html body aside #profile form > div span {
+  padding: 10px;
+  display: inline-block;
+  width: 60%;
+}
+html body aside #profile form > div .colour b {
+  width: 32px;
+  height: 32px;
+  display: inline-block;
+  vertical-align: middle;
+  border: 1px solid white;
+  outline: 1px solid #CCC;
+  margin: -5px 5px;
+}
+html body aside #profile form > div .colour i {
+  margin-left: 5px;
+}
+html body aside #profile form > div .hobbies {
+  margin: 0;
+  padding: 10px;
+  min-height: 60px;
+}
+html body aside #profile form > div .hobbies li {
+  list-style: none;
+  border: 1px solid #CCC;
+  padding: 5px;
+  display: inline-block;
+  background: white;
+  margin: 2px;
+}
+html body aside #profile form #actions {
+  display: none;
+  background: white !important;
+  padding: 10px;
+  text-align: center;
+}
+html body aside #profile form #actions button {
+  margin: 0 10px;
+}
+html body footer {
+  grid-area: footer;
+  height: 50px;
+  background: #33393B;
+  line-height: 40px;
+  padding: 5px 20px;
+  color: white;
+}
+html body footer .by a {
+  color: #71AC69 !important;
+}
+html body footer #social {
+  float: right;
+}
+html body footer a {
+  color: white !important;
+  padding: 0 5px;
+}
+html #loading {
+  position: fixed;
+  top: 0;
+  right: 0;
+  left: 0;
+  bottom: 0;
+  display: none;
+}
+html #loading div {
+  line-height: 88px;
+  height: 88px;
+  text-align: center;
+  color: white;
+  font-size: 100%;
+  background: #000D;
+  width: 300px;
+  margin: auto;
+  border-radius: 8px;
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  top: 0;
+}
 
 /*
   ##Device = Desktops
@@ -310,7 +383,8 @@ html {
 @media (max-width: 1090px) {
   body {
     grid-template-areas: "header" "main" "footer" !important;
-    grid-template-columns: auto !important; }
+    grid-template-columns: auto !important;
+  }
 
   aside {
     position: fixed;
@@ -319,15 +393,20 @@ html {
     right: 0;
     bottom: 0;
     background: white;
-    display: none; }
-    aside #close {
-      display: block !important; } }
+    display: none;
+  }
+  aside #close {
+    display: block !important;
+  }
+}
 /*
   ##Device = Low Resolution Tablets, Mobiles
 */
 @media (max-width: 850px) {
   #table ul li span {
-    font-size: 125% !important; } }
+    font-size: 125% !important;
+  }
+}
 /*
   ##Device = Most of the Smartphones Mobiles (Portrait)
 */
