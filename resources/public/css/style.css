@@ -187,7 +187,7 @@ html {
         height: 212px;
         margin: 20px auto;
         display: block;
-        border: 4px solid #33393B;
+        border: 4px solid #ccc;
         padding: 2px; }
       html body aside #profile {
         margin: 10px; }
@@ -253,7 +253,7 @@ html {
         html body aside #profile form #actions {
           display: none;
           background: white !important;
-          padding: 10px 40px;
+          padding: 10px;
           text-align: center; }
           html body aside #profile form #actions button {
             margin: 0 10px; }
