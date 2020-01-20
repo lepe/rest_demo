@@ -26,12 +26,14 @@ document.addEventListener("DOMContentLoaded", function() {
      */
     function updateProfile(id) {
         if(id) {
+            loading.show = true;
             $get(apiUrl + "/person/" + id, function(person) {
+                loading.show = false;
                 photo.show = true;
                 photo.img.src = getProfilePhoto(id);
                 profile.name.value = person.first_name + " " + person.last_name;
                 profile.age.value = person.age;
-                profile.colour.div.css = person.favourite_colour;
+                profile.colour.b.css = person.favourite_colour;
                 profile.colour.favourite = person.favourite_colour;
                 profile.hobbies.items.length = 0;
                 for(var h in person.hobby) {
@@ -39,12 +41,14 @@ document.addEventListener("DOMContentLoaded", function() {
                 }
                 editId = person.id;
                 actions.disabled = false;
+            }, function() {
+                loading.show = false;
             });
         } else {
             photo.img.src = getProfilePhoto(id);
             profile.name.value = "";
             profile.age.value = "";
-            profile.colour.div.css = "white";
+            profile.colour.b.css = "white";
             profile.colour.i = "";
             profile.hobbies.items.length = 0;
             editId = 0;
@@ -85,9 +89,16 @@ document.addEventListener("DOMContentLoaded", function() {
         }, yes, no || function() {});
     }
 
+    //Loading pane
+    var loading = m2d2("#loading", {
+        show: false
+    });
+
     // Main table list. We are showing only the first 100
     var table = m2d2("#table", function(callback) {
+        loading.show = true;
         $get(apiUrl + "/people/0/100", function(row) {
+            loading.show = false;
             var people = [];
             var first = 0;
             for(var p in row) {
@@ -112,7 +123,7 @@ document.addEventListener("DOMContentLoaded", function() {
                     name  : person.first_name + " " + person.last_name,
                     age   : person.age,
                     colour : {
-                        div : {
+                        b : {
                             css : person.favourite_colour
                         }
                     }
@@ -123,6 +134,7 @@ document.addEventListener("DOMContentLoaded", function() {
                 updateProfile(first);
             }
         }, function() {
+            loading.show = false;
             ng("There was a problem while connecting to service.");
         });
     });
@@ -153,14 +165,19 @@ document.addEventListener("DOMContentLoaded", function() {
                     hobby       : hobbyList
                 }
                 if(editId) {
+                    loading.show = true;
                     $put(apiUrl + "/person/"+editId, data, function(res) {
+                        loading.show = false;
                         ok("Saved successfully!");
                         table.m2d2.update();
                     }, function() {
+                        loading.show = false;
                         ng("Error while saving data.");
                     });
                 } else {
+                    loading.show = true;
                     $post(apiUrl + "/person", data, function(res) {
+                        loading.show = false;
                         if(res.ok) {
                             editId = res.id;
                             updateProfile(editId);
@@ -168,6 +185,7 @@ document.addEventListener("DOMContentLoaded", function() {
                             table.m2d2.update();
                         }
                     }, function() {
+                        loading.show = false;
                         ng("Error while saving data.");
                     });
                 }
@@ -178,7 +196,9 @@ document.addEventListener("DOMContentLoaded", function() {
             value : "",
             required : true,
             readOnly : true,
-            placeholder: "First Last"
+            placeholder: "First Last",
+            pattern  : "^[A-Za-z]+\\s[A-Za-z]+$",
+            title    : ""
         },
         age  : {
             value : "",
@@ -188,13 +208,13 @@ document.addEventListener("DOMContentLoaded", function() {
             readOnly : true
         },
         colour : {
-            div : {
+            b : {
                 css : ""
             },
             favourite : {
                 value : "",
                 onchange : function() {
-                    profile.colour.div.css = this.value;
+                    profile.colour.b.css = this.value;
                 },
                 onmousedown : function() {
                     return profile.form.css == "edit";
@@ -207,6 +227,14 @@ document.addEventListener("DOMContentLoaded", function() {
             onchange : function() {
                 addHobby(this.value);
                 this.value = "";
+            },
+            onkeydown : function(e) {
+                if(e.keyCode === 13){
+                    e.preventDefault();
+                    addHobby(this.value);
+                    this.value = "";
+                    return false;
+                }
             }
         },
         hobbies : {
@@ -221,9 +249,13 @@ document.addEventListener("DOMContentLoaded", function() {
             onclick : function() {
                 yn("delete", function() {
                     if(editId) {
+                        loading.show = true;
                         $delete(apiUrl + "/person/"+editId, function(res) {
+                            loading.show = false;
                             updateProfile(0);
                             table.m2d2.update();
+                        }, function() {
+                            loading.show = false;
                         });
                     }
                 });
@@ -243,17 +275,18 @@ document.addEventListener("DOMContentLoaded", function() {
     var login = m2d2("#login", {
         show: true,
         onclick: function() {
-            var value = "admin";
-            /*notie.input({
+            notie.input({
               text: "Please input password",
               submitText: 'Login',
               position: "top",
               type: 'password'
-            }, function(value) {*/
+            }, function(value) {
+                loading.show = true;
                 $post(apiUrl + "/auth/login", {
                     user: "admin",
                     pass: value
                 }, function(){
+                    loading.show = false;
                     login.show = false;
                     logout.show = true;
                     profile.form.css = "edit";
@@ -261,11 +294,13 @@ document.addEventListener("DOMContentLoaded", function() {
                     profile.name.readOnly = false;
                     profile.age.readOnly = false;
                     profile.hobby.readOnly = false;
+                    profile.name.title = "Names are only accepted in the format: 'first_name<space>last_name'";
                     ok("Login succeed!");
                 }, function() {
+                    loading.show = false;
                     ng("Login failed!");
                 });
-           // }, function (value) {});
+            }, function (value) {});
             return false;
         }
     });
@@ -274,7 +309,9 @@ document.addEventListener("DOMContentLoaded", function() {
     var logout = m2d2("#logout", {
         show: false,
         onclick: function() {
+            loading.show = true;
             $get(apiUrl + "/auth/logout", function() {
+                loading.show = false;
                 login.show = true;
                 logout.show = false;
                 profile.form.css = "";
@@ -282,7 +319,10 @@ document.addEventListener("DOMContentLoaded", function() {
                 profile.name.readOnly = true;
                 profile.age.readOnly = true;
                 profile.hobby.readOnly = true;
+                profile.name.title = "";
                 ok("Logged out");
+            }, function() {
+                loading.show = true;
             });
             return false;
         }
@@ -293,5 +333,4 @@ document.addEventListener("DOMContentLoaded", function() {
         template : "option",
         items : hobbiesFullList
     });
-
 });

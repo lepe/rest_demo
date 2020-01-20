@@ -1,0 +1,1 @@
+packageSearchIndex = [{"l":"All Packages","url":"allpackages-index.html"},{"l":"com.alepe.rest_demo"},{"l":"com.alepe.rest_demo.auth"},{"l":"com.alepe.rest_demo.person"},{"l":"com.alepe.rest_demo.person.actions"},{"l":"com.alepe.rest_demo.types"}]

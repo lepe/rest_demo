@@ -115,7 +115,7 @@ html {
                         .colour {
                             grid-area: color;
                             text-align: center;
-                            div {
+                            b {
                                 width: 32px;
                                 height: 32px;
                                 display: inline-block;
@@ -198,7 +198,7 @@ html {
                             display: inline-block;
                         }
                         .colour {
-                            div {
+                            b {
                                 width: 32px;
                                 height: 32px;
                                 display: inline-block;
@@ -256,6 +256,30 @@ html {
                 color: white !important;
                 padding: 0 5px;
             }
+        }
+    }
+    #loading {
+        position: fixed;
+        top: 0;
+        right: 0;
+        left: 0;
+        bottom: 0;
+        display:none;
+        div {
+            line-height: 88px;
+            height: 88px;
+            text-align: center;
+            color: white;
+            font-size: 100%;
+            background: #000D;
+            width: 300px;
+            margin: auto;
+            border-radius: 8px;
+            position: absolute;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            top: 0;
         }
     }
 }

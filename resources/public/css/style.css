@@ -1,31 +1,31 @@
-div.white {
+b.white {
   background-color: white; }
 
-div.black {
+b.black {
   background-color: black; }
 
-div.red {
+b.red {
   background-color: #C23825; }
 
-div.blue {
+b.blue {
   background-color: #227FBB; }
 
-div.green {
+b.green {
   background-color: #19AF5D; }
 
-div.yellow {
+b.yellow {
   background-color: #F3C501; }
 
-div.orange {
+b.orange {
   background-color: #D55400; }
 
-div.purple {
+b.purple {
   background-color: #8F40AF; }
 
-div.pink {
+b.pink {
   background-color: #DA549F; }
 
-div.brown {
+b.brown {
   background-color: #AF5740; }
 
 button {
@@ -161,7 +161,7 @@ html {
             html body article #table ul li .colour {
               grid-area: color;
               text-align: center; }
-              html body article #table ul li .colour div {
+              html body article #table ul li .colour b {
                 width: 32px;
                 height: 32px;
                 display: inline-block;
@@ -220,7 +220,7 @@ html {
           html body aside #profile form > div input, html body aside #profile form > div span {
             padding: 10px;
             display: inline-block; }
-          html body aside #profile form > div .colour div {
+          html body aside #profile form > div .colour b {
             width: 32px;
             height: 32px;
             display: inline-block;
@@ -262,6 +262,28 @@ html {
       html body footer a {
         color: white !important;
         padding: 0 5px; }
+  html #loading {
+    position: fixed;
+    top: 0;
+    right: 0;
+    left: 0;
+    bottom: 0;
+    display: none; }
+    html #loading div {
+      line-height: 88px;
+      height: 88px;
+      text-align: center;
+      color: white;
+      font-size: 100%;
+      background: #000D;
+      width: 300px;
+      margin: auto;
+      border-radius: 8px;
+      position: absolute;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      top: 0; }
 
 /*
   ##Device = Desktops

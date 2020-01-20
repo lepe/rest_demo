@@ -1,6 +1,5 @@
 package com.alepe.rest_demo.person
 
-import com.intellisrc.core.Log
 import com.alepe.rest_demo.Main
 import com.alepe.rest_demo.types.Color
 import groovyx.net.http.ContentType
