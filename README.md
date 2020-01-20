@@ -204,7 +204,11 @@ required files to execute the services.
 ## Setting up the production environment:
 
 ### Requirements:
+* Linux
 * Java 11 JRE
+
+Client:
+
 * Modern Browser (IE and Edge may not be supported)
 
   **Note**: Tested in:

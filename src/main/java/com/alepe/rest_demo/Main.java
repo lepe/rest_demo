@@ -31,6 +31,11 @@ public class Main extends SysService {
      */
     static {
         service = new Main();
+        try {
+            Class.forName("org.sqlite.JDBC");
+        } catch (ClassNotFoundException e) {
+            System.out.println("SQLite Driver is not present");
+        }
     }
 
     final WebService ws = new WebService();
@@ -64,9 +69,7 @@ public class Main extends SysService {
         ws.setResources(SysInfo.getFile("resources","public"));
         ws.addService(new AuthService());
         ws.addService(new PersonAPI());
-        ws.onStart = (Service service) -> {
-            running = true;
-        };
+        ws.onStart = (Service service) -> running = true;
         ws.start(true);
     }
 
