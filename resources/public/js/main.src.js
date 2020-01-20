@@ -147,6 +147,18 @@ document.addEventListener("DOMContentLoaded", function() {
         show: false
     });
 
+    // Aside show/hide control
+    var aside = m2d2("aside", function() {
+        show : true
+    });
+    // This handles the close button on aside
+    var close_aside = m2d2("#close", {
+        show : false,
+        onclick : function() {
+            aside.show = false;
+        }
+    });
+
     // Main table list. We are showing only the first 100
     var table = m2d2("#table", function(callback) {
         loading.show = true;
@@ -165,6 +177,7 @@ document.addEventListener("DOMContentLoaded", function() {
                         var row = e.target;
                         var id = this.dataset.id;
                         updateProfile(id);
+                        aside.show = true;
                         return false;
                     },
                     photo : {
@@ -325,6 +338,7 @@ document.addEventListener("DOMContentLoaded", function() {
                         $delete(apiUrl + "/person/"+editId, function(res) {
                             loading.show = false;
                             updateProfile(0);
+                            aside.show = false;
                             table.m2d2.update();
                         }, function() {
                             loading.show = false;

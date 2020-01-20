@@ -175,6 +175,13 @@ html {
               background-color: #f2f2f2; }
     html body aside {
       grid-area: side; }
+      html body aside #close {
+        font-size: 200%;
+        position: absolute;
+        right: 10px;
+        top: 10px;
+        color: #C23825;
+        display: none; }
       html body aside #photo {
         width: 212px;
         height: 212px;
@@ -207,12 +214,10 @@ html {
             background: #33393B;
             color: white;
             width: 40%; }
-          html body aside #profile form > div input {
-            width: 276px; }
           html body aside #profile form > div select {
             padding: 10px;
             margin: -10px 0;
-            width: 205px;
+            width: calc(100% - 48px);
             -webkit-appearance: none;
             -moz-appearance: none;
             appearance: none; }
@@ -222,7 +227,8 @@ html {
             cursor: default; }
           html body aside #profile form > div input, html body aside #profile form > div span {
             padding: 10px;
-            display: inline-block; }
+            display: inline-block;
+            width: 60%; }
           html body aside #profile form > div .colour b {
             width: 32px;
             height: 32px;
@@ -313,7 +319,9 @@ html {
     right: 0;
     bottom: 0;
     background: white;
-    display: none; } }
+    display: none; }
+    aside #close {
+      display: block !important; } }
 /*
   ##Device = Low Resolution Tablets, Mobiles
 */

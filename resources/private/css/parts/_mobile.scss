@@ -32,7 +32,10 @@
         right   : 0;
         bottom  : 0;
         background: white;
-        display :none;
+        display: none;
+        #close {
+            display: block !important;
+        }
     }
  }
 
