@@ -13,6 +13,7 @@ JavaDoc:  https://rest-demo.alepe.com/doc/
 
 | Function       | Visibility | Method   | URI                               | Response                          |
 |----------------|------------|----------|-----------------------------------|-----------------------------------|
+| API Status     | Public     | GET      | /api/v1/                          | Object : status                   |
 | List people    | Public     | GET      | /api/v1/people/$offset/$limit     | Array of objects : people list    |
 | Search people  | Public     | GET      | /api/v1/people/$keyword           | Array of objects : people list    |
 | Get person     | Public     | GET      | /api/v1/person/$id                | Object : person                   |
