@@ -23,6 +23,8 @@ fi
 rm -rf deploy/*.jar
 cp build/libs/*.jar deploy/
 rsync -a --delete resources/ deploy/resources/
+VERSION=$(grep "currentVersion=" gradle.properties | sed 's/currentVersion=\(.*\)/\1/')
+sed -i "s/VERSION/$VERSION/g" $(grep -Rl "VERSION" deploy/resources/);
 cp config.properties deploy/
 cp run deploy/
 cp *.sql deploy/
