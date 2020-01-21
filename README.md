@@ -249,6 +249,18 @@ To view the logs you can use `lnav` (recommended), `tail -f` or `less -r`.
 * The UI comes with up to 100 different profile photos (above 100, the images will be recycled).
 * It doesn't support pagination, so a maximum of 100 people can be displayed on the screen. Ideally it should load and 
 display items as needed (aka RecyclerView).
+* For simplicity, only password is requested (user is fixed as 'admin').
+
+## Security
+* Authentication is done through user/password verification.
+* Passwords are stored in database using BCrypt hash algorithm.
+* Authorization is achieved using a session and comparing the original IP address to the one requesting the service.
+* All user inputs are sanitazed and are parametrized to prevent SQL Injection and XSS attacks.
+* No external -untrusted- resources/scripts are loaded or injected in any way (with the exception of a google font).
+* API content-type is always "application/json".
+* Only HTTPS is used (Using Let's Encrypt certification).
+* Cookies are secured with "HttpOnly" and "Secure" flags.
+* Using Content-Security-Policy header to protect against XSS attacks.
 
 ## Credits:
 
