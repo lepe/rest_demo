@@ -254,7 +254,7 @@ display items as needed (aka RecyclerView).
 ## Security
 * Authentication is done through user/password verification.
 * Passwords are stored in database using BCrypt hash algorithm.
-* Authorization is achieved using a session and comparing the original IP address to the one requesting the service.
+* Authorization is achieved using sessions and comparing the original IP address to the one requesting the service.
 * All user inputs are sanitazed and are parametrized to prevent SQL Injection and XSS attacks.
 * No external -untrusted- resources/scripts are loaded or injected in any way (with the exception of a google font).
 * API content-type is always "application/json".
