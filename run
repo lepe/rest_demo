@@ -2,10 +2,18 @@
 clear
 
 if [[ -d build/ ]]; then
+    cp config.properties build/libs/
     cd build/libs/
 fi
 
 msgJAVABIN="/usr/bin/java"
+if [[ ! -f $msgJAVABIN ]]; then
+    msgJAVABIN=$(which java);
+fi
+if [[ ! -f $msgJAVABIN ]]; then
+    echo "Java must be installed. It was not found.";
+    exit;
+fi
 JAR=$(ls -v -w 1 *.jar | tail -n1)
 $msgJAVABIN -Xmx6G -Xms1G -jar $JAR "${@:1}"
 exit 0;
